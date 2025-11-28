@@ -100,7 +100,7 @@
                     <button id="login-admin-button" class="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         डेटा लोड करें
                     </button>
-                    </div>
+                </div>
 
                 <div id="admin-content" class="hidden">
                     <div class="flex justify-between items-center mb-4">
@@ -137,20 +137,20 @@
     </div>
 
     <script>
-        // ADMIN_PASSWORD वेरिएबल और लॉगिन चेक हटा दिए गए हैं।
         const FORM_CLOSED = false;
 
-        // --- 2. Firebase Initialization ---
+        // --- 2. New Firebase Configuration ---
         const firebaseConfig = {
-            apiKey:"AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
+            apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
             authDomain: "prasadam-coupon-d1351.firebaseapp.com",
             projectId: "prasadam-coupon-d1351",
-            storageBucket:  "prasadam-coupon-d1351.firebasestorage.app",
+            storageBucket: "prasadam-coupon-d1351.firebasestorage.app",
             messagingSenderId: "475680540304",
-            appId:"1:475680540304:web:d9b4836d7ea1a709f2fa15,
+            appId: "1:475680540304:web:d9b4836d7ea1a709f2fa15",
             measurementId: "G-2VLPJ634P3"
         };
 
+        // Firebase को इनिशियलाइज़ करें
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -170,8 +170,6 @@
         const closeModalButton = document.getElementById('close-modal-button');
         const loginAdminButton = document.getElementById('login-admin-button');
         const logoutAdminButton = document.getElementById('logout-admin-button');
-        // const adminPasswordInput = document.getElementById('admin-password'); // हटा दिया गया है
-        // const adminLoginError = document.getElementById('admin-login-error'); // हटा दिया गया है
         const adminLoginForm = document.getElementById('admin-login-form');
         const adminContent = document.getElementById('admin-content');
         const attendeeList = document.getElementById('attendee-list');
@@ -290,7 +288,7 @@
             }
         }
 
-        // --- Admin Login/Load Data (अब कोई पासवर्ड नहीं है) ---
+        // --- Admin Login/Load Data (पासवर्ड रहित) ---
 
         async function adminLogin() {
             adminLoginForm.classList.add('hidden');
@@ -337,7 +335,6 @@
             adminLogout();
         });
 
-        // लॉगिन बटन पर क्लिक करने पर सीधे डेटा लोड करें
         loginAdminButton.addEventListener('click', adminLogin);
 
         logoutAdminButton.addEventListener('click', adminLogout);
@@ -355,6 +352,7 @@
         function initializeApp() {
             showView('loading');
             
+            // Firebase initialization finished, now switch to the correct view
             if (FORM_CLOSED) {
                 showView('closed');
             } else {
