@@ -61,12 +61,6 @@
                     <input type="email" id="email" name="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="उदाहरण: email@example.com">
                 </div>
                 
-                <div>
-                    <label for="groupSize" class="block text-sm font-medium text-gray-700">लोगों की संख्या (खुद सहित) <span class="text-red-500">*</span></label>
-                    <input type="number" id="groupSize" name="groupSize" required min="1" max="10" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="1">
-                    <p class="mt-1 text-xs text-gray-500">समूह का अधिकतम आकार 10 है।</p>
-                </div>
-
                 <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
                     पंजीकरण करें
                 </button>
@@ -103,18 +97,16 @@
                 <h3 class="text-xl leading-6 font-medium text-gray-900 mb-4">एडमिन डैशबोर्ड</h3>
 
                 <div id="admin-login-form" class="space-y-4 max-w-sm mx-auto p-4 border rounded-lg mb-6">
-                    <input type="password" id="admin-password" placeholder="पासवर्ड" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
                     <button id="login-admin-button" class="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        लॉग इन करें
+                        डेटा लोड करें
                     </button>
-                    <p id="admin-login-error" class="text-red-500 text-sm mt-2 hidden"></p>
-                </div>
+                    </div>
 
                 <div id="admin-content" class="hidden">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-lg font-semibold text-gray-800">पंजीकृत एंट्री (<span id="attendee-count">0</span>)</h4>
                         <button id="logout-admin-button" class="py-1 px-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
-                            लॉग आउट
+                            डैशबोर्ड छिपाएँ
                         </button>
                     </div>
 
@@ -126,7 +118,6 @@
                                     <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">नाम</th>
                                     <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">फ़ोन</th>
                                     <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">ईमेल</th>
-                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">संख्या</th>
                                     <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">समय</th>
                                 </tr>
                             </thead>
@@ -146,7 +137,7 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "admin123";
+        // ADMIN_PASSWORD वेरिएबल और लॉगिन चेक हटा दिए गए हैं।
         const FORM_CLOSED = false;
 
         // --- 2. Firebase Initialization ---
@@ -160,9 +151,7 @@
             measurementId: "G-8Z5FE1N65E"
         };
 
-        // Firebase को इनिशियलाइज़ करें
         firebase.initializeApp(firebaseConfig);
-        // Firestore डेटाबेस का संदर्भ प्राप्त करें
         const db = firebase.firestore();
 
 
@@ -181,8 +170,8 @@
         const closeModalButton = document.getElementById('close-modal-button');
         const loginAdminButton = document.getElementById('login-admin-button');
         const logoutAdminButton = document.getElementById('logout-admin-button');
-        const adminPasswordInput = document.getElementById('admin-password');
-        const adminLoginError = document.getElementById('admin-login-error');
+        // const adminPasswordInput = document.getElementById('admin-password'); // हटा दिया गया है
+        // const adminLoginError = document.getElementById('admin-login-error'); // हटा दिया गया है
         const adminLoginForm = document.getElementById('admin-login-form');
         const adminContent = document.getElementById('admin-content');
         const attendeeList = document.getElementById('attendee-list');
@@ -191,7 +180,6 @@
 
         // --- Utility Functions ---
 
-        // एक रैंडम, छोटा, पढ़ने में आसान ID बनाएँ
         function generateEntryId() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let id = '';
@@ -220,181 +208,4 @@
             messageContainer.innerHTML = '';
             const classes = type === 'success'
                 ? 'bg-green-100 border-green-400 text-green-700'
-                : 'bg-red-100 border-red-400 text-red-700';
-
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `px-4 py-3 rounded relative border ${classes}`;
-            alertDiv.innerHTML = `<span class="block sm:inline">${message}</span>`;
-            messageContainer.appendChild(alertDiv);
-        }
-
-        // --- Main Form Logic (Firebase Save) ---
-
-        entryForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            messageContainer.innerHTML = '';
-            const submitButton = document.getElementById('submit-button');
-            submitButton.disabled = true;
-            submitButton.textContent = 'पंजीकरण हो रहा है...';
-
-            try {
-                const name = document.getElementById('name').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-                const email = document.getElementById('email').value.trim();
-                // 'city' इनपुट यहाँ से हटा दिया गया है
-                const groupSize = parseInt(document.getElementById('groupSize').value);
-
-                if (!name || !phone || groupSize < 1 || groupSize > 10) {
-                    // सिटी की आवश्यकता हटा दी गई है
-                    throw new Error("कृपया नाम, फ़ोन नंबर और संख्या सही ढंग से भरें।");
-                }
-
-                const entryId = generateEntryId();
-                const now = firebase.firestore.FieldValue.serverTimestamp(); 
-
-                const newEntry = {
-                    id: entryId,
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    // 'city' प्रॉपर्टी यहाँ से हटा दी गई है
-                    groupSize: groupSize,
-                    timestamp: now,
-                };
-
-                // Firebase Firestore में डेटा जोड़ें
-                await db.collection('attendees').add(newEntry);
-
-                // सफलता का दृश्य दिखाएँ
-                displayEntryId.textContent = entryId;
-                showView('success');
-                entryForm.reset(); 
-
-            } catch (error) {
-                console.error("Firebase Error:", error);
-                displayMessage('error', error.message || "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।");
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'पंजीकरण करें';
-            }
-        });
-
-        newRegistrationButton.addEventListener('click', () => {
-            showView('form');
-        });
-
-
-        // --- Admin Dashboard Logic (Firebase Read) ---
-
-        async function fetchAttendees() {
-            try {
-                const snapshot = await db.collection('attendees')
-                    .orderBy('timestamp', 'desc')
-                    .get();
-
-                const attendees = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const date = data.timestamp && data.timestamp.toDate ? data.timestamp.toDate() : new Date();
-                    return {
-                        ...data,
-                        timestamp: date,
-                        docId: doc.id
-                    };
-                });
-                return attendees;
-            } catch (error) {
-                console.error("Error fetching attendees:", error);
-                alert("डेटा लोड करने में त्रुटि हुई। कंसोल देखें।");
-                return [];
-            }
-        }
-
-        function renderAttendees(attendees) {
-            attendeeList.innerHTML = '';
-            attendeeCountSpan.textContent = attendees.length;
-
-            attendees.forEach(entry => {
-                const timeString = entry.timestamp ? entry.timestamp.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
-                
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td class="px-2 py-2 truncate-id">${entry.id}</td>
-                    <td class="px-2 py-2 whitespace-nowrap">${entry.name}</td>
-                    <td class="px-2 py-2 whitespace-nowrap">${entry.phone}</td>
-                    <td class="px-2 py-2 text-xs">${entry.email || '-'}</td>
-                    <td class="px-2 py-2 text-center">${entry.groupSize}</td>
-                    <td class="px-2 py-2 whitespace-nowrap">${timeString}</td>
-                `;
-                // 'City' वाला td हटा दिया गया है
-                attendeeList.appendChild(newRow);
-            });
-        }
-
-        async function adminLogin() {
-            adminLoginError.classList.add('hidden');
-            if (adminPasswordInput.value === ADMIN_PASSWORD) {
-                adminLoginForm.classList.add('hidden');
-                adminContent.classList.remove('hidden');
-                const attendees = await fetchAttendees();
-                renderAttendees(attendees);
-            } else {
-                adminLoginError.textContent = "अमान्य पासवर्ड।";
-                adminLoginError.classList.remove('hidden');
-            }
-            adminPasswordInput.value = '';
-        }
-
-        function adminLogout() {
-            adminContent.classList.add('hidden');
-            adminLoginForm.classList.remove('hidden');
-            attendeeList.innerHTML = ''; 
-            attendeeCountSpan.textContent = 0;
-        }
-
-        // --- Event Listeners for Admin ---
-        showAdminButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            adminModal.classList.remove('hidden');
-        });
-
-        closeModalButton.addEventListener('click', () => {
-            adminModal.classList.add('hidden');
-            adminLogout();
-        });
-
-        loginAdminButton.addEventListener('click', adminLogin);
-
-        adminPasswordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                adminLogin();
-            }
-        });
-
-        logoutAdminButton.addEventListener('click', adminLogout);
-        
-        adminModal.addEventListener('click', (e) => {
-            if (e.target === adminModal) {
-                adminModal.classList.add('hidden');
-                adminLogout();
-            }
-        });
-
-
-        // --- Initialization ---
-
-        function initializeApp() {
-            showView('loading');
-            
-            if (FORM_CLOSED) {
-                showView('closed');
-            } else {
-                showView('form');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', initializeApp);
-
-    </script>
-
-</body>
-</html>
+                : 'bg-red-100 border-red-
