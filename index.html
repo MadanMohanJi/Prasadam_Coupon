@@ -97,16 +97,20 @@
                 <h3 class="text-xl leading-6 font-medium text-gray-900 mb-4">एडमिन डैशबोर्ड</h3>
 
                 <div id="admin-login-form" class="space-y-4 max-w-sm mx-auto p-4 border rounded-lg mb-6">
+                    <input type="email" id="admin-email" placeholder="ईमेल" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="password" id="admin-password" placeholder="पासवर्ड" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    
                     <button id="login-admin-button" class="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        डेटा लोड करें
+                        लॉग इन करें
                     </button>
+                    <p id="admin-login-error" class="text-red-500 text-sm mt-2 hidden"></p>
                 </div>
 
                 <div id="admin-content" class="hidden">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-lg font-semibold text-gray-800">पंजीकृत एंट्री (<span id="attendee-count">0</span>)</h4>
                         <button id="logout-admin-button" class="py-1 px-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
-                            डैशबोर्ड छिपाएँ
+                            लॉग आउट
                         </button>
                     </div>
 
@@ -138,6 +142,11 @@
 
     <script>
         const FORM_CLOSED = false;
+        
+        // !! WARNING: Hardcoded credentials. Use Firebase Auth for production!
+        const ADMIN_EMAIL = "admin@example.com";
+        const ADMIN_PASSWORD = "admin123";
+        // !!
 
         // --- 2. New Firebase Configuration ---
         const firebaseConfig = {
@@ -170,6 +179,12 @@
         const closeModalButton = document.getElementById('close-modal-button');
         const loginAdminButton = document.getElementById('login-admin-button');
         const logoutAdminButton = document.getElementById('logout-admin-button');
+        
+        // Admin Login Inputs
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const adminLoginError = document.getElementById('admin-login-error');
+        
         const adminLoginForm = document.getElementById('admin-login-form');
         const adminContent = document.getElementById('admin-content');
         const attendeeList = document.getElementById('attendee-list');
@@ -289,18 +304,32 @@
             }
         }
 
-        // --- Admin Login/Load Data (पासवर्ड रहित) ---
-
+        // --- Admin Login/Authentication ---
         async function adminLogin() {
-            adminLoginForm.classList.add('hidden');
-            adminContent.classList.remove('hidden');
-            const attendees = await fetchAttendees();
-            renderAttendees(attendees);
+            adminLoginError.classList.add('hidden');
+            const email = adminEmailInput.value.trim();
+            const password = adminPasswordInput.value.trim();
+
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // Login Success
+                adminLoginForm.classList.add('hidden');
+                adminContent.classList.remove('hidden');
+                
+                const attendees = await fetchAttendees();
+                renderAttendees(attendees);
+            } else {
+                // Login Failure
+                adminLoginError.textContent = "अमान्य ईमेल या पासवर्ड।";
+                adminLoginError.classList.remove('hidden');
+            }
+            adminPasswordInput.value = '';
         }
 
         function adminLogout() {
             adminContent.classList.add('hidden');
             adminLoginForm.classList.remove('hidden');
+            adminEmailInput.value = ''; // Clear email input on logout
+            adminPasswordInput.value = ''; // Clear password input on logout
             attendeeList.innerHTML = ''; 
             attendeeCountSpan.textContent = 0;
         }
@@ -337,6 +366,12 @@
         });
 
         loginAdminButton.addEventListener('click', adminLogin);
+        
+        adminPasswordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
 
         logoutAdminButton.addEventListener('click', adminLogout);
         
@@ -353,7 +388,6 @@
         function initializeApp() {
             showView('loading');
             
-            // Firebase initialization के बाद, view को form या closed state पर स्विच करें
             if (FORM_CLOSED) {
                 showView('closed');
             } else {
