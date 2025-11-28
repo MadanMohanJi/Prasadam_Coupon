@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इवेंट एंट्री पंजीकरण (Firebase)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap');
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+        /* Custom styles for the Admin Dashboard table */
+        #attendee-list th, #attendee-list td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; font-size: 0.85rem; }
+        #attendee-list th { background-color: #f0f0f0; font-weight: 600; }
+        .truncate-id { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="app-container" class="w-full max-w-lg bg-white shadow-xl rounded-xl p-6 md:p-10">
+        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">इस्कॉन उज्जैन मंदिर हॉल</h1>
+
+        <div id="loading-state" class="text-center py-10">
+            <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="text-gray-600">एप्लिकेशन लोड हो रहा है...</p>
+            <p id="loading-error-msg" class="text-red-500 text-sm mt-2 hidden"></p>
+        </div>
+
+        <div id="closed-section" class="hidden text-center py-8">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">क्षमा करें!</strong>
+                <span class="block sm:inline">पंजीकरण फ़ॉर्म अभी बंद है।</span>
+            </div>
+        </div>
+
+        <div id="form-section" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">इवेंट पंजीकरण</h2>
+            <form id="entry-form" class="space-y-4">
+
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">पूरा नाम <span class="text-red-500">*</span></label>
+                    <input type="text" id="name" name="name" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="उदाहरण: मोहन शर्मा">
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">फ़ोन नंबर <span class="text-red-500">*</span></label>
+                    <input type="tel" id="phone" name="phone" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="उदाहरण: 9876543210" pattern="[0-9]{10,15}">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">ईमेल (वैकल्पिक)</label>
+                    <input type="email" id="email" name="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="उदाहरण: email@example.com">
+                </div>
+                
+                <div>
+                    <label for="groupSize" class="block text-sm font-medium text-gray-700">लोगों की संख्या (खुद सहित) <span class="text-red-500">*</span></label>
+                    <input type="number" id="groupSize" name="groupSize" required min="1" max="10" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="1">
+                    <p class="mt-1 text-xs text-gray-500">समूह का अधिकतम आकार 10 है।</p>
+                </div>
+
+                <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                    पंजीकरण करें
+                </button>
+            </form>
+
+            <div id="message-container" class="mt-6">
+                </div>
+        </div>
+
+        <div id="success-section" class="hidden text-center py-8">
+            <svg class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">सफलतापूर्वक पंजीकृत!</h2>
+            <p class="text-gray-600 mb-6">इवेंट में आपकी एंट्री सुरक्षित है। आपको जल्द ही एक पुष्टि संदेश प्राप्त होगा।</p>
+            <div id="entry-details" class="bg-indigo-50 border-l-4 border-indigo-500 text-indigo-700 p-4 rounded-lg text-left inline-block">
+                <p class="font-semibold mb-1">आपकी एंट्री ID:</p>
+                <p id="display-entry-id" class="text-lg font-mono break-all"></p>
+            </div>
+            <button id="new-registration-button" class="mt-6 w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                नया पंजीकरण करें
+            </button>
+        </div>
+
+        <div id="admin-login-link" class="text-center mt-6 text-sm">
+            <a href="#" id="show-admin-button" class="text-indigo-600 hover:text-indigo-800 font-medium">एडमिन डैशबोर्ड</a>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/5 shadow-lg rounded-md bg-white">
+
+            <div class="mt-3 text-center">
+                <h3 class="text-xl leading-6 font-medium text-gray-900 mb-4">एडमिन डैशबोर्ड</h3>
+
+                <div id="admin-login-form" class="space-y-4 max-w-sm mx-auto p-4 border rounded-lg mb-6">
+                    <input type="password" id="admin-password" placeholder="पासवर्ड" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    <button id="login-admin-button" class="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        लॉग इन करें
+                    </button>
+                    <p id="admin-login-error" class="text-red-500 text-sm mt-2 hidden"></p>
+                </div>
+
+                <div id="admin-content" class="hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">पंजीकृत एंट्री (<span id="attendee-count">0</span>)</h4>
+                        <button id="logout-admin-button" class="py-1 px-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
+                            लॉग आउट
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto max-h-96">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">नाम</th>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">फ़ोन</th>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">ईमेल</th>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">संख्या</th>
+                                    <th class="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">समय</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendee-list" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="items-center px-4 py-3">
+                    <button id="close-modal-button" class="mt-4 py-2 px-4 rounded-lg text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300">
+                        बंद करें
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "admin123";
+        const FORM_CLOSED = false;
+
+        // --- 2. Firebase Initialization ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcNR9PtQwO6V13CTaP0rRq8UEnEKuF2yQ",
+            authDomain: "prasadam-coupon.firebaseapp.com",
+            projectId: "prasadam-coupon",
+            storageBucket: "prasadam-coupon.firebasestorage.app",
+            messagingSenderId: "994864083790",
+            appId: "1:994864083790:web:8299762f50724b45afa41f",
+            measurementId: "G-8Z5FE1N65E"
+        };
+
+        // Firebase को इनिशियलाइज़ करें
+        firebase.initializeApp(firebaseConfig);
+        // Firestore डेटाबेस का संदर्भ प्राप्त करें
+        const db = firebase.firestore();
+
+
+        // --- DOM Elements ---
+        const loadingState = document.getElementById('loading-state');
+        const formSection = document.getElementById('form-section');
+        const closedSection = document.getElementById('closed-section');
+        const successSection = document.getElementById('success-section');
+        const entryForm = document.getElementById('entry-form');
+        const messageContainer = document.getElementById('message-container');
+        const displayEntryId = document.getElementById('display-entry-id');
+        const newRegistrationButton = document.getElementById('new-registration-button');
+        
+        const adminModal = document.getElementById('admin-modal');
+        const showAdminButton = document.getElementById('show-admin-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const loginAdminButton = document.getElementById('login-admin-button');
+        const logoutAdminButton = document.getElementById('logout-admin-button');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const adminLoginError = document.getElementById('admin-login-error');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminContent = document.getElementById('admin-content');
+        const attendeeList = document.getElementById('attendee-list');
+        const attendeeCountSpan = document.getElementById('attendee-count');
+
+
+        // --- Utility Functions ---
+
+        // एक रैंडम, छोटा, पढ़ने में आसान ID बनाएँ
+        function generateEntryId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let id = '';
+            for (let i = 0; i < 6; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
+
+        function showView(viewId) {
+            const sections = [loadingState, formSection, closedSection, successSection];
+            sections.forEach(sec => sec.classList.add('hidden'));
+
+            if (viewId === 'loading') {
+                loadingState.classList.remove('hidden');
+            } else if (viewId === 'closed') {
+                closedSection.classList.remove('hidden');
+            } else if (viewId === 'form') {
+                formSection.classList.remove('hidden');
+            } else if (viewId === 'success') {
+                successSection.classList.remove('hidden');
+            }
+        }
+
+        function displayMessage(type, message) {
+            messageContainer.innerHTML = '';
+            const classes = type === 'success'
+                ? 'bg-green-100 border-green-400 text-green-700'
+                : 'bg-red-100 border-red-400 text-red-700';
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `px-4 py-3 rounded relative border ${classes}`;
+            alertDiv.innerHTML = `<span class="block sm:inline">${message}</span>`;
+            messageContainer.appendChild(alertDiv);
+        }
+
+        // --- Main Form Logic (Firebase Save) ---
+
+        entryForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            messageContainer.innerHTML = '';
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.textContent = 'पंजीकरण हो रहा है...';
+
+            try {
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const email = document.getElementById('email').value.trim();
+                // 'city' इनपुट यहाँ से हटा दिया गया है
+                const groupSize = parseInt(document.getElementById('groupSize').value);
+
+                if (!name || !phone || groupSize < 1 || groupSize > 10) {
+                    // सिटी की आवश्यकता हटा दी गई है
+                    throw new Error("कृपया नाम, फ़ोन नंबर और संख्या सही ढंग से भरें।");
+                }
+
+                const entryId = generateEntryId();
+                const now = firebase.firestore.FieldValue.serverTimestamp(); 
+
+                const newEntry = {
+                    id: entryId,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    // 'city' प्रॉपर्टी यहाँ से हटा दी गई है
+                    groupSize: groupSize,
+                    timestamp: now,
+                };
+
+                // Firebase Firestore में डेटा जोड़ें
+                await db.collection('attendees').add(newEntry);
+
+                // सफलता का दृश्य दिखाएँ
+                displayEntryId.textContent = entryId;
+                showView('success');
+                entryForm.reset(); 
+
+            } catch (error) {
+                console.error("Firebase Error:", error);
+                displayMessage('error', error.message || "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'पंजीकरण करें';
+            }
+        });
+
+        newRegistrationButton.addEventListener('click', () => {
+            showView('form');
+        });
+
+
+        // --- Admin Dashboard Logic (Firebase Read) ---
+
+        async function fetchAttendees() {
+            try {
+                const snapshot = await db.collection('attendees')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                const attendees = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp && data.timestamp.toDate ? data.timestamp.toDate() : new Date();
+                    return {
+                        ...data,
+                        timestamp: date,
+                        docId: doc.id
+                    };
+                });
+                return attendees;
+            } catch (error) {
+                console.error("Error fetching attendees:", error);
+                alert("डेटा लोड करने में त्रुटि हुई। कंसोल देखें।");
+                return [];
+            }
+        }
+
+        function renderAttendees(attendees) {
+            attendeeList.innerHTML = '';
+            attendeeCountSpan.textContent = attendees.length;
+
+            attendees.forEach(entry => {
+                const timeString = entry.timestamp ? entry.timestamp.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td class="px-2 py-2 truncate-id">${entry.id}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${entry.name}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${entry.phone}</td>
+                    <td class="px-2 py-2 text-xs">${entry.email || '-'}</td>
+                    <td class="px-2 py-2 text-center">${entry.groupSize}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${timeString}</td>
+                `;
+                // 'City' वाला td हटा दिया गया है
+                attendeeList.appendChild(newRow);
+            });
+        }
+
+        async function adminLogin() {
+            adminLoginError.classList.add('hidden');
+            if (adminPasswordInput.value === ADMIN_PASSWORD) {
+                adminLoginForm.classList.add('hidden');
+                adminContent.classList.remove('hidden');
+                const attendees = await fetchAttendees();
+                renderAttendees(attendees);
+            } else {
+                adminLoginError.textContent = "अमान्य पासवर्ड।";
+                adminLoginError.classList.remove('hidden');
+            }
+            adminPasswordInput.value = '';
+        }
+
+        function adminLogout() {
+            adminContent.classList.add('hidden');
+            adminLoginForm.classList.remove('hidden');
+            attendeeList.innerHTML = ''; 
+            attendeeCountSpan.textContent = 0;
+        }
+
+        // --- Event Listeners for Admin ---
+        showAdminButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminModal.classList.remove('hidden');
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            adminLogout();
+        });
+
+        loginAdminButton.addEventListener('click', adminLogin);
+
+        adminPasswordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                adminLogin();
+            }
+        });
+
+        logoutAdminButton.addEventListener('click', adminLogout);
+        
+        adminModal.addEventListener('click', (e) => {
+            if (e.target === adminModal) {
+                adminModal.classList.add('hidden');
+                adminLogout();
+            }
+        });
+
+
+        // --- Initialization ---
+
+        function initializeApp() {
+            showView('loading');
+            
+            if (FORM_CLOSED) {
+                showView('closed');
+            } else {
+                showView('form');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+
+</body>
+</html>
