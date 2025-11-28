@@ -81,7 +81,7 @@
                 <p class="font-semibold mb-1">आपकी एंट्री ID:</p>
                 <p id="display-entry-id" class="text-lg font-mono break-all"></p>
             </div>
-            <button id="new-registration-button" class="mt-6 w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+            <button onclick="handleNewRegistration()" id="new-registration-button" class="mt-6 w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
                 नया पंजीकरण करें
             </button>
         </div>
@@ -110,7 +110,7 @@
                 <div id="admin-content" class="hidden">
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-lg font-semibold text-gray-800">पंजीकृत एंट्री (<span id="attendee-count">0</span>)</h4>
-                        <button id="logout-admin-button" class="py-1 px-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
+                        <button onclick="handleSignOutAndGuestMode()" class="py-1 px-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200">
                             लॉग आउट
                         </button>
                     </div>
@@ -141,10 +141,18 @@
         </div>
     </div>
 
-    <script>
-        const FORM_CLOSED = false;
+    <script type="module">
+        // Firebase Auth Modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
-        // --- Firebase Configuration ---
+        // --- Configuration ---
+        const FORM_CLOSED = false;
+        const ADMIN_EMAIL = "admin@example.com"; // यह ईमेल आपके Firebase Auth में मौजूद होना चाहिए
+        const ADMIN_PASSWORD_PLACEHOLDER = "password123"; // यह केवल संकेत है, Auth सीधे Firebase से जांच करेगा
+
+        // --- Firebase Configuration (Same as provided) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
             authDomain: "prasadam-coupon-d1351.firebaseapp.com",
@@ -156,10 +164,11 @@
         };
 
         // Firebase को इनिशियलाइज़ करें
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth(); // Firebase Auth का संदर्भ प्राप्त करें
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app); 
 
+        let userId = null;
 
         // --- DOM Elements ---
         const loadingState = document.getElementById('loading-state');
@@ -169,24 +178,17 @@
         const entryForm = document.getElementById('entry-form');
         const messageContainer = document.getElementById('message-container');
         const displayEntryId = document.getElementById('display-entry-id');
-        const newRegistrationButton = document.getElementById('new-registration-button');
         
         const adminModal = document.getElementById('admin-modal');
-        const showAdminButton = document.getElementById('show-admin-button');
-        const closeModalButton = document.getElementById('close-modal-button');
-        const loginAdminButton = document.getElementById('login-admin-button');
-        const logoutAdminButton = document.getElementById('logout-admin-button');
-        
-        // Admin Login Inputs
         const adminEmailInput = document.getElementById('admin-email');
         const adminPasswordInput = document.getElementById('admin-password');
         const adminLoginError = document.getElementById('admin-login-error');
-        
         const adminLoginForm = document.getElementById('admin-login-form');
         const adminContent = document.getElementById('admin-content');
         const attendeeList = document.getElementById('attendee-list');
         const attendeeCountSpan = document.getElementById('attendee-count');
 
+        const submitButton = document.getElementById('submit-button');
 
         // --- Utility Functions ---
 
@@ -200,7 +202,7 @@
         }
 
         function showView(viewId) {
-            const sections = [loadingState, formSection, closedSection, successSection];
+            const sections = [loadingState, formSection, closedSection, successSection, adminModal];
             sections.forEach(sec => sec.classList.add('hidden'));
 
             if (viewId === 'loading') {
@@ -211,6 +213,11 @@
                 formSection.classList.remove('hidden');
             } else if (viewId === 'success') {
                 successSection.classList.remove('hidden');
+            } else if (viewId === 'admin_login') {
+                adminModal.classList.remove('hidden');
+                adminLoginForm.classList.remove('hidden');
+                adminContent.classList.add('hidden');
+                adminLoginError.classList.add('hidden');
             }
         }
 
@@ -226,138 +233,23 @@
             messageContainer.appendChild(alertDiv);
         }
 
-        // --- Main Form Logic (Firebase Save) ---
-
-        entryForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            messageContainer.innerHTML = '';
-            const submitButton = document.getElementById('submit-button');
-            submitButton.disabled = true;
-            submitButton.textContent = 'पंजीकरण हो रहा है...';
-
-            try {
-                const name = document.getElementById('name').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-                const email = document.getElementById('email').value.trim();
-
-                if (!name || !phone) {
-                    throw new Error("कृपया नाम और फ़ोन नंबर सही ढंग से भरें।");
-                }
-
-                const entryId = generateEntryId();
-                const now = firebase.firestore.FieldValue.serverTimestamp(); 
-
-                const newEntry = {
-                    id: entryId,
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    timestamp: now,
-                };
-
-                await db.collection('attendees').add(newEntry);
-
-                displayEntryId.textContent = entryId;
-                showView('success');
-                entryForm.reset(); 
-
-            } catch (error) {
-                console.error("Firebase Error:", error);
-                displayMessage('error', error.message || "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।");
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'पंजीकरण करें';
-            }
-        });
-
-        newRegistrationButton.addEventListener('click', () => {
-            showView('form');
-        });
-
-
-        // --- Admin Dashboard Logic (Firebase Read) ---
+        // --- Firebase Data Functions ---
 
         async function fetchAttendees() {
-            try {
-                // डेटा को नवीनतम टाइमस्टैम्प द्वारा क्रमबद्ध (sorted) करें
-                const snapshot = await db.collection('attendees')
-                    .orderBy('timestamp', 'desc')
-                    .get();
+            const q = query(collection(db, "attendees"), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
 
-                const attendees = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const date = data.timestamp && data.timestamp.toDate ? data.timestamp.toDate() : new Date();
-                    return {
-                        ...data,
-                        timestamp: date,
-                        docId: doc.id
-                    };
-                });
-                return attendees;
-            } catch (error) {
-                console.error("Error fetching attendees:", error);
-                alert("डेटा लोड करने में त्रुटि हुई। कृपया कंसोल देखें।");
-                return [];
-            }
-        }
-
-        // --- Admin Login/Authentication (Using Firebase Auth) ---
-        async function adminLogin() {
-            adminLoginError.classList.add('hidden');
-            loginAdminButton.disabled = true;
-            
-            const email = adminEmailInput.value.trim();
-            const password = adminPasswordInput.value.trim();
-
-            if (!email || !password) {
-                adminLoginError.textContent = "कृपया ईमेल और पासवर्ड भरें।";
-                adminLoginError.classList.remove('hidden');
-                loginAdminButton.disabled = false;
-                return;
-            }
-
-            try {
-                // Firebase Authentication के साथ साइन इन करें
-                await auth.signInWithEmailAndPassword(email, password);
-                
-                // Login Success
-                adminLoginForm.classList.add('hidden');
-                adminContent.classList.remove('hidden');
-                
-                const attendees = await fetchAttendees();
-                renderAttendees(attendees);
-
-            } catch (error) {
-                // Login Failure
-                console.error("Authentication Error:", error);
-                let errorMessage = "लॉगिन विफल रहा। कृपया क्रेडेंशियल्स की जाँच करें।";
-                
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    errorMessage = "अमान्य ईमेल या पासवर्ड।";
-                }
-                adminLoginError.textContent = errorMessage;
-                adminLoginError.classList.remove('hidden');
-
-            } finally {
-                loginAdminButton.disabled = false;
-                adminPasswordInput.value = ''; // सुरक्षा के लिए पासवर्ड हटाएँ
-            }
-        }
-
-        function adminLogout() {
-            // Firebase से साइन आउट करें (सुरक्षा के लिए अच्छा अभ्यास)
-            auth.signOut().then(() => {
-                console.log("Admin signed out.");
-            }).catch((error) => {
-                console.error("Sign out error:", error);
+            const attendees = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: data.id,
+                    name: data.name,
+                    phone: data.phone,
+                    email: data.email,
+                    timestamp: data.timestamp ? data.timestamp.toDate() : new Date(),
+                };
             });
-
-            adminContent.classList.add('hidden');
-            adminLoginForm.classList.remove('hidden');
-            adminEmailInput.value = ''; 
-            adminPasswordInput.value = ''; 
-            attendeeList.innerHTML = ''; 
-            attendeeCountSpan.textContent = 0;
+            return attendees;
         }
 
         function renderAttendees(attendees) {
@@ -379,41 +271,109 @@
             });
         }
 
-
-        // --- Event Listeners for Admin ---
-        showAdminButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            adminModal.classList.remove('hidden');
-        });
-
-        closeModalButton.addEventListener('click', () => {
-            adminModal.classList.add('hidden');
-            adminLogout();
-        });
-
-        loginAdminButton.addEventListener('click', adminLogin);
-        
-        adminPasswordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                adminLogin();
-            }
-        });
-
-        logoutAdminButton.addEventListener('click', adminLogout);
-        
-        adminModal.addEventListener('click', (e) => {
-            if (e.target === adminModal) {
-                adminModal.classList.add('hidden');
-                adminLogout();
-            }
-        });
-
-
-        // --- Initialization ---
-
-        function initializeApp() {
-            showView('loading');
+        async function renderAdminDashboard() {
+            showView('loading'); // Show loading while fetching
+            adminModal.classList.remove('hidden'); // Ensure modal is visible
+            adminLoginForm.classList.add('hidden');
+            adminContent.classList.remove('hidden');
             
+            const attendees = await fetchAttendees();
+            renderAttendees(attendees);
+            showView('admin_content'); // Keep modal visible with content
+        }
+        
+        // --- Core Logic ---
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            messageContainer.innerHTML = '';
+            submitButton.disabled = true;
+            submitButton.textContent = 'पंजीकरण हो रहा है...';
+
+            try {
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const email = document.getElementById('email').value.trim();
+
+                if (!name || !phone) {
+                    throw new Error("कृपया नाम और फ़ोन नंबर सही ढंग से भरें।");
+                }
+
+                const entryId = generateEntryId();
+
+                const newEntry = {
+                    id: entryId,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    timestamp: serverTimestamp(),
+                    userId: userId // Anonymous user ID
+                };
+
+                await addDoc(collection(db, "attendees"), newEntry);
+
+                displayEntryId.textContent = entryId;
+                showView('success');
+                entryForm.reset(); 
+
+            } catch (error) {
+                console.error("Submission Error:", error);
+                displayMessage('error', error.message || "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'पंजीकरण करें';
+            }
+        }
+
+        // --- Auth Handlers ---
+
+        async function adminLogin() {
+            adminLoginError.classList.add('hidden');
+            document.getElementById('login-admin-button').disabled = true;
+            
+            const email = adminEmailInput.value.trim();
+            const password = adminPasswordInput.value.trim();
+
+            if (!email || !password) {
+                adminLoginError.textContent = "कृपया ईमेल और पासवर्ड भरें।";
+                adminLoginError.classList.remove('hidden');
+                document.getElementById('login-admin-button').disabled = false;
+                return;
+            }
+
+            try {
+                // Firebase Authentication के साथ साइन इन करें
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (user.email === ADMIN_EMAIL) {
+                    // Login Success: Auth State Change listener will handle dashboard rendering
+                    adminModal.classList.add('hidden'); // Close modal
+                    showView('loading');
+                } else {
+                    // Not the designated admin email
+                    await signOut(auth); // Sign out the logged-in user
+                    adminLoginError.textContent = "आपके पास एडमिन एक्सेस नहीं है।";
+                    adminLoginError.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                // Login Failure
+                let errorMessage = "लॉगिन विफल रहा। कृपया क्रेडेंशियल्स की जाँच करें।";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = "अमान्य ईमेल या पासवर्ड।";
+                }
+                adminLoginError.textContent = errorMessage;
+                adminLoginError.classList.remove('hidden');
+
+            } finally {
+                document.getElementById('login-admin-button').disabled = false;
+                adminPasswordInput.value = '';
+            }
+        }
+
+        // User listener for the form view
+        function listenForEntryCard() {
             if (FORM_CLOSED) {
                 showView('closed');
             } else {
@@ -421,9 +381,97 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        async function initializeAppAndAuth() {
+            showView('loading');
+            try {
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        // User is signed out or first load
+                        userId = null;
+                        
+                        // If coming from admin logout, try anonymous sign in
+                        if (auth.currentUser === null && !adminModal.classList.contains('hidden')) {
+                            try { await signInAnonymously(auth); } catch (e) {
+                                document.getElementById('loading-error-msg').textContent = "Auth Error. Enable Anonymous Auth.";
+                                document.getElementById('loading-error-msg').classList.remove('hidden');
+                            }
+                            return; // Wait for the new anonymous state change
+                        }
 
+                        // Anonymous Sign In for guest/form access
+                        try { await signInAnonymously(auth); } catch (e) { 
+                            document.getElementById('loading-error-msg').textContent = "Auth Error. Enable Anonymous Auth.";
+                            document.getElementById('loading-error-msg').classList.remove('hidden');
+                        }
+                    } else {
+                        // User is signed in (Anonymous or Admin)
+                        userId = user.uid;
+                        
+                        // Check if allowed admin
+                        if (user.email === ADMIN_EMAIL) {
+                            renderAdminDashboard();
+                        } else {
+                            listenForEntryCard(); // Show Form/Closed section
+                        }
+                    }
+                });
+            } catch (error) {
+                document.getElementById('loading-error-msg').textContent = "Init Error.";
+                document.getElementById('loading-error-msg').classList.remove('hidden');
+            }
+        }
+
+        // Exposed handlers for HTML clicks
+        async function handleSignOutAndGuestMode() {
+            try { await signOut(auth); } catch(e) {}
+            // onAuthStateChanged will handle the rest (signing in as anonymous)
+            showView('loading');
+        }
+        window.handleSignOutAndGuestMode = handleSignOutAndGuestMode;
+
+        async function handleNewRegistration() {
+            try { 
+                if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
+                     // If admin is signed in, sign them out to switch to guest mode
+                    await signOut(auth); 
+                } else {
+                    // If already a guest, just switch view
+                    listenForEntryCard();
+                }
+            } catch(e) {
+                listenForEntryCard();
+            }
+        }
+        window.handleNewRegistration = handleNewRegistration;
+
+        // --- Event Listeners ---
+        
+        entryForm.addEventListener('submit', handleFormSubmit);
+        document.getElementById('login-admin-button').addEventListener('click', adminLogin);
+        adminPasswordInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
+        adminEmailInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
+
+        document.getElementById('show-admin-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            // If already signed in as admin, show dashboard immediately
+            if (auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
+                renderAdminDashboard();
+            } else {
+                showView('admin_login'); // Show login form
+            }
+        });
+
+        document.getElementById('close-modal-button').addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            // Check if admin is signed in, if so, keep them signed in but hide modal
+            if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
+                 showView('loading'); // Show loading briefly then form (by onAuthStateChanged listener)
+            } else {
+                 listenForEntryCard(); // Back to form
+            }
+        });
+
+        initializeAppAndAuth();
     </script>
-
 </body>
 </html>
