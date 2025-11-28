@@ -267,6 +267,7 @@
 
         async function fetchAttendees() {
             try {
+                // डेटा को नवीनतम टाइमस्टैम्प द्वारा क्रमबद्ध (sorted) करें
                 const snapshot = await db.collection('attendees')
                     .orderBy('timestamp', 'desc')
                     .get();
@@ -283,7 +284,7 @@
                 return attendees;
             } catch (error) {
                 console.error("Error fetching attendees:", error);
-                alert("डेटा लोड करने में त्रुटि हुई। कंसोल देखें।");
+                alert("डेटा लोड करने में त्रुटि हुई। कृपया कंसोल देखें।");
                 return [];
             }
         }
@@ -352,7 +353,7 @@
         function initializeApp() {
             showView('loading');
             
-            // Firebase initialization finished, now switch to the correct view
+            // Firebase initialization के बाद, view को form या closed state पर स्विच करें
             if (FORM_CLOSED) {
                 showView('closed');
             } else {
