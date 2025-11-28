@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>इस्कॉन इवेंट एंट्री पंजीकरण (Firebase)</title>
+    <title>इस्कॉन इवेंट एंट्री पंजीकरण (Firebase Auth)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -40,9 +40,9 @@
         }
     </style>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
@@ -182,12 +182,7 @@
         </div>
     </div>
 
-    <script type="module">
-        // Firebase Auth, Firestore and Date Utilities
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-        import { getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
-
+    <script>
         // --- Configuration ---
         const FORM_CLOSED = false;
         const ADMIN_EMAIL = "admin@example.com"; 
@@ -203,13 +198,13 @@
             measurementId: "G-2VLPJ634P3"
         };
 
-        // Firebase को इनिशियलाइज़ करें
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app); 
+        // Firebase को इनिशियलाइज़ करें (v9 Compatibility Syntax)
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = app.firestore();
+        const auth = app.auth(); 
 
         let userId = null;
-        let currentAttendees = []; // Store attendees for CSV export
+        let currentAttendees = [];
 
         // --- DOM Elements ---
         const loadingState = document.getElementById('loading-state');
@@ -260,9 +255,11 @@
                 adminLoginForm.classList.remove('hidden');
                 adminContent.classList.add('hidden');
                 adminLoginError.classList.add('hidden');
+            } else if (viewId === 'admin_content') { // For showing modal content after load
+                 adminModal.classList.remove('hidden');
             }
         }
-        
+
         function displayMessage(type, message) {
             messageContainer.innerHTML = '';
             const classes = type === 'success'
@@ -284,8 +281,7 @@
         // --- Firebase Data Functions ---
 
         async function fetchAttendees() {
-            const q = query(collection(db, "attendees"), orderBy("timestamp", "desc"));
-            const snapshot = await getDocs(q);
+            const snapshot = await db.collection("attendees").orderBy("timestamp", "desc").get();
 
             currentAttendees = snapshot.docs.map(doc => {
                 const data = doc.data();
@@ -304,8 +300,7 @@
         async function deleteAttendee(docId) {
             if (!confirm('क्या आप सचमुच इस एंट्री को हटाना चाहते हैं?')) return;
             try {
-                await deleteDoc(doc(db, "attendees", docId));
-                // Reload dashboard after deletion
+                await db.collection("attendees").doc(docId).delete();
                 renderAdminDashboard(); 
             } catch (error) {
                 alert("एंट्री हटाने में त्रुटि हुई: " + error.message);
@@ -321,10 +316,8 @@
                 return;
             }
 
-            // Define headers
             const headers = ["ID", "नाम", "फ़ोन", "ईमेल", "पंजीकरण समय"];
             
-            // Map data to CSV format, handling Date objects and removing docId
             const csvRows = data.map(row => {
                 const timestamp = row.timestamp instanceof Date ? row.timestamp.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : row.timestamp;
                 return [
@@ -337,8 +330,8 @@
             });
 
             const csvContent = [
-                headers.join(','), // Headers row
-                ...csvRows // Data rows
+                headers.join(','), 
+                ...csvRows
             ].join('\n');
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -381,15 +374,13 @@
 
         async function renderAdminDashboard() {
             showView('loading'); 
-            adminModal.classList.remove('hidden'); 
-            adminLoginForm.classList.add('hidden');
-            adminContent.classList.remove('hidden');
             
             const attendees = await fetchAttendees();
             renderAttendees(attendees);
-            // After loading, ensure only the modal is shown if already admin
-            showView('loading'); 
-            adminModal.classList.remove('hidden');
+            
+            adminLoginForm.classList.add('hidden');
+            adminContent.classList.remove('hidden');
+            showView('admin_content'); 
         }
 
 
@@ -410,10 +401,20 @@
             }
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                // Login Success: Auth State Change listener will handle dashboard rendering
-                adminModal.classList.add('hidden'); // Close modal
-                showView('loading');
+                // Firebase Authentication के साथ साइन इन करें
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                if (user.email === ADMIN_EMAIL) {
+                    // Login Success: Auth State Change listener will handle dashboard rendering
+                    adminModal.classList.add('hidden'); // Close modal
+                    showView('loading');
+                } else {
+                    // Not the designated admin email
+                    await auth.signOut(); // Sign out the logged-in user
+                    adminLoginError.textContent = "आपके पास एडमिन एक्सेस नहीं है।";
+                    adminLoginError.classList.remove('hidden');
+                }
 
             } catch (error) {
                 let errorMessage = "लॉगिन विफल रहा। कृपया क्रेडेंशियल्स की जाँच करें।";
@@ -440,10 +441,11 @@
         async function initializeAppAndAuth() {
             showView('loading');
             try {
-                onAuthStateChanged(auth, async (user) => {
+                auth.onAuthStateChanged(async (user) => {
                     if (!user) {
                         userId = null;
-                        try { await signInAnonymously(auth); } catch (e) { 
+                        // Anonymous Sign In for guest/form access
+                        try { await auth.signInAnonymously(); } catch (e) { 
                             document.getElementById('loading-error-msg').textContent = "Auth Error. Enable Anonymous Auth.";
                             document.getElementById('loading-error-msg').classList.remove('hidden');
                         }
@@ -458,13 +460,13 @@
                     }
                 });
             } catch (error) {
-                document.getElementById('loading-error-msg').textContent = "Init Error.";
+                document.getElementById('loading-error-msg').textContent = "Init Error. Check Console.";
                 document.getElementById('loading-error-msg').classList.remove('hidden');
             }
         }
 
         async function handleSignOutAndGuestMode() {
-            try { await signOut(auth); } catch(e) {}
+            try { await auth.signOut(); } catch(e) {}
             showView('loading');
         }
         window.handleSignOutAndGuestMode = handleSignOutAndGuestMode;
@@ -472,7 +474,7 @@
         async function handleNewRegistration() {
             try { 
                 if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
-                    await signOut(auth); 
+                    await auth.signOut(); 
                 } else {
                     listenForEntryCard();
                 }
@@ -486,8 +488,8 @@
         
         entryForm.addEventListener('submit', handleFormSubmit);
         document.getElementById('login-admin-button').addEventListener('click', adminLogin);
-        adminPasswordInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
-        adminEmailInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
+        document.getElementById('admin-password').addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
+        document.getElementById('admin-email').addEventListener('keypress', function(e) { if (e.key === 'Enter') adminLogin(); });
         downloadCsvButton.addEventListener('click', () => exportToCSV(currentAttendees)); // CSV Export
 
         document.getElementById('show-admin-button').addEventListener('click', (e) => {
