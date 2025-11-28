@@ -141,14 +141,13 @@
         const FORM_CLOSED = false;
 
         // --- 2. Firebase Initialization ---
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-            apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
+            apiKey:"AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
             authDomain: "prasadam-coupon-d1351.firebaseapp.com",
             projectId: "prasadam-coupon-d1351",
-            storageBucket: "prasadam-coupon-d1351.firebasestorage.app",
+            storageBucket:  "prasadam-coupon-d1351.firebasestorage.app",
             messagingSenderId: "475680540304",
-            appId: "1:475680540304:web:d9b4836d7ea1a709f2fa15",
+            appId:"1:475680540304:web:d9b4836d7ea1a709f2fa15,
             measurementId: "G-2VLPJ634P3"
         };
 
@@ -209,4 +208,163 @@
             messageContainer.innerHTML = '';
             const classes = type === 'success'
                 ? 'bg-green-100 border-green-400 text-green-700'
-                : 'bg-red-100 border-red-
+                : 'bg-red-100 border-red-400 text-red-700';
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `px-4 py-3 rounded relative border ${classes}`;
+            alertDiv.innerHTML = `<span class="block sm:inline">${message}</span>`;
+            messageContainer.appendChild(alertDiv);
+        }
+
+        // --- Main Form Logic (Firebase Save) ---
+
+        entryForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            messageContainer.innerHTML = '';
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.textContent = 'पंजीकरण हो रहा है...';
+
+            try {
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const email = document.getElementById('email').value.trim();
+
+                if (!name || !phone) {
+                    throw new Error("कृपया नाम और फ़ोन नंबर सही ढंग से भरें।");
+                }
+
+                const entryId = generateEntryId();
+                const now = firebase.firestore.FieldValue.serverTimestamp(); 
+
+                const newEntry = {
+                    id: entryId,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    timestamp: now,
+                };
+
+                await db.collection('attendees').add(newEntry);
+
+                displayEntryId.textContent = entryId;
+                showView('success');
+                entryForm.reset(); 
+
+            } catch (error) {
+                console.error("Firebase Error:", error);
+                displayMessage('error', error.message || "पंजीकरण विफल रहा। कृपया पुनः प्रयास करें।");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'पंजीकरण करें';
+            }
+        });
+
+        newRegistrationButton.addEventListener('click', () => {
+            showView('form');
+        });
+
+
+        // --- Admin Dashboard Logic (Firebase Read) ---
+
+        async function fetchAttendees() {
+            try {
+                const snapshot = await db.collection('attendees')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                const attendees = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp && data.timestamp.toDate ? data.timestamp.toDate() : new Date();
+                    return {
+                        ...data,
+                        timestamp: date,
+                        docId: doc.id
+                    };
+                });
+                return attendees;
+            } catch (error) {
+                console.error("Error fetching attendees:", error);
+                alert("डेटा लोड करने में त्रुटि हुई। कंसोल देखें।");
+                return [];
+            }
+        }
+
+        // --- Admin Login/Load Data (अब कोई पासवर्ड नहीं है) ---
+
+        async function adminLogin() {
+            adminLoginForm.classList.add('hidden');
+            adminContent.classList.remove('hidden');
+            const attendees = await fetchAttendees();
+            renderAttendees(attendees);
+        }
+
+        function adminLogout() {
+            adminContent.classList.add('hidden');
+            adminLoginForm.classList.remove('hidden');
+            attendeeList.innerHTML = ''; 
+            attendeeCountSpan.textContent = 0;
+        }
+
+        function renderAttendees(attendees) {
+            attendeeList.innerHTML = '';
+            attendeeCountSpan.textContent = attendees.length;
+
+            attendees.forEach(entry => {
+                const timeString = entry.timestamp ? entry.timestamp.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td class="px-2 py-2 truncate-id">${entry.id}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${entry.name}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${entry.phone}</td>
+                    <td class="px-2 py-2 text-xs">${entry.email || '-'}</td>
+                    <td class="px-2 py-2 whitespace-nowrap">${timeString}</td>
+                `;
+                attendeeList.appendChild(newRow);
+            });
+        }
+
+
+        // --- Event Listeners for Admin ---
+        showAdminButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminModal.classList.remove('hidden');
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            adminLogout();
+        });
+
+        // लॉगिन बटन पर क्लिक करने पर सीधे डेटा लोड करें
+        loginAdminButton.addEventListener('click', adminLogin);
+
+        logoutAdminButton.addEventListener('click', adminLogout);
+        
+        adminModal.addEventListener('click', (e) => {
+            if (e.target === adminModal) {
+                adminModal.classList.add('hidden');
+                adminLogout();
+            }
+        });
+
+
+        // --- Initialization ---
+
+        function initializeApp() {
+            showView('loading');
+            
+            if (FORM_CLOSED) {
+                showView('closed');
+            } else {
+                showView('form');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+
+</body>
+</html>
