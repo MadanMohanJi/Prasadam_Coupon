@@ -3,36 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>डेटा रिकवरी मोड</title>
+    <title>Deep Recovery Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap');
-        body { font-family: 'Noto Sans Devanagari', sans-serif; background-color: #fff1f2; }
-    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="p-8 text-center bg-gray-50">
 
-    <div class="w-full max-w-lg bg-white shadow-xl rounded-xl p-8 text-center border-2 border-red-200">
-        <h1 class="text-2xl font-bold text-red-600 mb-2">🚑 डेटा रिकवरी टूल</h1>
-        <p class="text-gray-600 mb-6">यह टूल 'Private Folders' से डेटा स्कैन करके वापस लाएगा।</p>
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-lg border border-indigo-200">
+        <h1 class="text-2xl font-bold text-indigo-700 mb-2">Deep Data Recovery</h1>
+        <p class="text-gray-600 mb-6">यह टूल छुपे हुए 'Private User Folders' को स्कैन करेगा।</p>
 
-        <div id="status-box" class="bg-gray-100 p-4 rounded mb-4 text-left text-sm h-40 overflow-y-auto font-mono">
-            सिस्टम तैयार है...<br>
-        </div>
-
-        <button onclick="startRecovery()" id="recover-btn" class="w-full bg-orange-600 text-white py-3 rounded-lg font-bold hover:bg-orange-700 shadow-lg">
-            🔍 डेटा ढूँढें और डाउनलोड करें (Start Recovery)
+        <button onclick="startDeepScan()" id="scan-btn" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 shadow-lg transition">
+            🚀 स्कैन शुरू करें (Start Scan)
         </button>
-        
-        <p id="index-error-msg" class="text-red-600 text-xs mt-4 hidden">
-            <b>ध्यान दें:</b> अगर यह काम नहीं करता, तो Console (F12) चेक करें। Firebase आपको एक लिंक देगा, उस पर क्लिक करके Index बनाएं।
-        </p>
+
+        <div id="logs" class="mt-6 text-left bg-black text-green-400 p-4 h-64 overflow-auto font-mono text-xs rounded border border-gray-400">
+            Waiting for user action...<br>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collectionGroup, getDocs, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collectionGroup, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
+        // --- आपकी CONFIG (Prasadam Coupon) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
             authDomain: "prasadam-coupon-d1351.firebaseapp.com",
@@ -45,91 +38,76 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const appId = firebaseConfig.projectId;
-        const statusBox = document.getElementById('status-box');
+        const logs = document.getElementById('logs');
+        const btn = document.getElementById('scan-btn');
 
-        function log(msg) {
-            statusBox.innerHTML += `> ${msg}<br>`;
-            statusBox.scrollTop = statusBox.scrollHeight;
+        function log(msg) { 
+            logs.innerHTML += `> ${msg}<br>`; 
+            logs.scrollTop = logs.scrollHeight;
         }
 
-        window.startRecovery = async function() {
-            const btn = document.getElementById('recover-btn');
+        window.startDeepScan = async function() {
             btn.disabled = true;
-            btn.textContent = "स्कैनिंग चल रही है...";
-            log("स्कैन शुरू हो रहा है...");
-
-            let recoveredData = [];
+            btn.textContent = "Scanning...";
+            log("Connecting to Database...");
+            log(`Project ID: ${firebaseConfig.projectId}`);
 
             try {
-                // यह 'registrations' नाम के सभी सब-फोल्डर्स को स्कैन करेगा
+                // यह 'registrations' नाम के हर फोल्डर को ढूंढेगा
                 const q = collectionGroup(db, 'registrations');
-                const querySnapshot = await getDocs(q);
+                const snapshot = await getDocs(q);
 
-                if (querySnapshot.empty) {
-                    log("❌ कोई डेटा नहीं मिला।");
-                    btn.disabled = false;
-                    return;
+                if (snapshot.empty) {
+                    log("❌ SCAN COMPLETE: कोई डेटा नहीं मिला।");
+                    log("कारण: या तो डेटाबेस पूरी तरह खाली है, या 'Index' नहीं बना है।");
+                    log("अगर आपने Console से मैन्युअली डिलीट किया था, तो डेटा हमेशा के लिए गया।");
+                } else {
+                    log(`✅ SUCCESS: ${snapshot.size} रिकॉर्ड्स मिले!`);
+                    log("CSV फाइल तैयार की जा रही है...");
+                    
+                    let csvContent = "data:text/csv;charset=utf-8,Name,Contact,Devotee,Date,UserID\n";
+                    
+                    snapshot.forEach(doc => {
+                        const d = doc.data();
+                        // कभी-कभी डेटा 'entryCard' के अंदर होता है
+                        const name = d.name || "N/A";
+                        const contact = d.contact || "N/A";
+                        const devotee = d.address || "N/A";
+                        const date = d.timestamp || "N/A";
+                        const uid = d.userId || "N/A";
+
+                        const row = `"${name}","${contact}","${devotee}","${date}","${uid}"`;
+                        csvContent += row + "\n";
+                    });
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "Restored_Data_Final.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    log("🎉 फाइल डाउनलोड हो गई है!");
                 }
 
-                log(`✅ ${querySnapshot.size} रिकॉर्ड्स मिले!`);
-                log("डेटा प्रोसेस हो रहा है...");
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    // अगर डेटा में नाम है, तो उसे लिस्ट में जोड़ें
-                    if (data.name) {
-                        recoveredData.push(data);
-                    }
-                });
-
-                log("CSV फाइल बनाई जा रही है...");
-                exportRecoveredData(recoveredData);
-                
-                // Optional: Restore to main list (Uncomment if needed)
-                // await restoreToMainList(recoveredData);
-
             } catch (error) {
-                console.error(error);
-                log("❌ ERROR: " + error.message);
+                log(`❌ ERROR: ${error.message}`);
                 
                 if (error.message.includes("requires an index")) {
-                    log("⚠️ INDEX REQUIRED: कंसोल (F12) खोलें और Firebase लिंक पर क्लिक करें।");
-                    document.getElementById('index-error-msg').classList.remove('hidden');
+                    log("⚠️ ACTION REQUIRED: नीचे एक लिंक है, उस पर क्लिक करें!");
+                    // लिंक को क्लिक करने योग्य बनाना
+                    const linkMatch = error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
+                    if (linkMatch) {
+                        log(`<a href="${linkMatch[0]}" target="_blank" style="color: yellow; text-decoration: underline;">👉 CLICK HERE TO CREATE INDEX 👈</a>`);
+                    } else {
+                        log("कंसोल (F12) खोलें और लिंक देखें।");
+                    }
                 }
             } finally {
                 btn.disabled = false;
-                btn.textContent = "दोबारा कोशिश करें";
+                btn.textContent = "Scan Again";
             }
         };
-
-        function exportRecoveredData(data) {
-            if (data.length === 0) { log("डाउनलोड के लिए डेटा नहीं है।"); return; }
-
-            const headers = ["Name", "Contact", "Linked Devotee", "Timestamp", "User ID"];
-            const rows = data.map(row => {
-                const safe = (text) => `"${(text || "").toString().replace(/"/g, '""')}"`;
-                return [
-                    safe(row.name),
-                    safe(row.contact),
-                    safe(row.address),
-                    safe(row.timestamp),
-                    safe(row.userId)
-                ].join(",");
-            });
-
-            const csvContent = [headers.join(","), ...rows].join("\n");
-            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `RECOVERED_DATA_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            log("🎉 सफलता! फाइल डाउनलोड हो गई है।");
-        }
     </script>
 </body>
 </html>
