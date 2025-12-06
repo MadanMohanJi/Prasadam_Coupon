@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Recovery Tool</title>
+    <title>5 Dec Data Recovery</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-8 text-center bg-gray-50">
+<body class="p-8 text-center bg-blue-50">
 
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-lg border border-indigo-200">
-        <h1 class="text-2xl font-bold text-indigo-700 mb-2">Deep Data Recovery</h1>
-        <p class="text-gray-600 mb-6">यह टूल छुपे हुए 'Private User Folders' को स्कैन करेगा।</p>
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-blue-200">
+        <h1 class="text-2xl font-bold text-blue-800 mb-2">📅 5 December Recovery Tool</h1>
+        <p class="text-gray-600 mb-6">यह टूल केवल <b>5 दिसंबर</b> का डेटा छांटकर डाउनलोड करेगा।</p>
 
-        <button onclick="startDeepScan()" id="scan-btn" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 shadow-lg transition">
-            🚀 स्कैन शुरू करें (Start Scan)
+        <button onclick="recoverSpecificDate()" id="scan-btn" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 shadow-lg transition">
+            📥 5 दिसंबर का डेटा डाउनलोड करें
         </button>
 
-        <div id="logs" class="mt-6 text-left bg-black text-green-400 p-4 h-64 overflow-auto font-mono text-xs rounded border border-gray-400">
-            Waiting for user action...<br>
+        <div id="logs" class="mt-6 text-left bg-black text-yellow-400 p-4 h-64 overflow-auto font-mono text-xs rounded border border-gray-400">
+            System Ready... Waiting for command.<br>
         </div>
     </div>
 
@@ -46,44 +46,62 @@
             logs.scrollTop = logs.scrollHeight;
         }
 
-        window.startDeepScan = async function() {
+        window.recoverSpecificDate = async function() {
             btn.disabled = true;
-            btn.textContent = "Scanning...";
+            btn.textContent = "Scanning & Filtering...";
             log("Connecting to Database...");
-            log(`Project ID: ${firebaseConfig.projectId}`);
+            
+            // TARGET DATE: 5 December
+            const targetDay = 5;
+            const targetMonth = 11; // JavaScript में December = 11 (0-11)
 
             try {
-                // यह 'registrations' नाम के हर फोल्डर को ढूंढेगा
+                // 1. सारा डेटा मंगाएं (Client-side filtering is safer for indexes)
                 const q = collectionGroup(db, 'registrations');
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
-                    log("❌ SCAN COMPLETE: कोई डेटा नहीं मिला।");
-                    log("कारण: या तो डेटाबेस पूरी तरह खाली है, या 'Index' नहीं बना है।");
-                    log("अगर आपने Console से मैन्युअली डिलीट किया था, तो डेटा हमेशा के लिए गया।");
+                    log("❌ DATABASE EMPTY: कोई डेटा नहीं मिला।");
+                    return;
+                }
+
+                log(`🔍 Total Records Scanned: ${snapshot.size}`);
+                log("Filtering for 5th December...");
+
+                let csvContent = "data:text/csv;charset=utf-8,Name,Contact,Devotee,Date,UserID\n";
+                let count = 0;
+
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    if (d.timestamp) {
+                        const entryDate = new Date(d.timestamp);
+                        
+                        // Check if Date is 5 AND Month is December
+                        if (entryDate.getDate() === targetDay && entryDate.getMonth() === targetMonth) {
+                            
+                            const name = d.name || "N/A";
+                            const contact = d.contact || "N/A";
+                            const devotee = d.address || "N/A"; // Using address field for devotee
+                            const dateStr = entryDate.toLocaleString();
+                            const uid = d.userId || "N/A";
+
+                            // CSV Row
+                            const row = `"${name}","${contact}","${devotee}","${dateStr}","${uid}"`;
+                            csvContent += row + "\n";
+                            count++;
+                        }
+                    }
+                });
+
+                if (count === 0) {
+                    log("⚠️ 5 दिसंबर की कोई एंट्री नहीं मिली।");
                 } else {
-                    log(`✅ SUCCESS: ${snapshot.size} रिकॉर्ड्स मिले!`);
-                    log("CSV फाइल तैयार की जा रही है...");
+                    log(`✅ SUCCESS: 5 दिसंबर के ${count} लोग मिले!`);
                     
-                    let csvContent = "data:text/csv;charset=utf-8,Name,Contact,Devotee,Date,UserID\n";
-                    
-                    snapshot.forEach(doc => {
-                        const d = doc.data();
-                        // कभी-कभी डेटा 'entryCard' के अंदर होता है
-                        const name = d.name || "N/A";
-                        const contact = d.contact || "N/A";
-                        const devotee = d.address || "N/A";
-                        const date = d.timestamp || "N/A";
-                        const uid = d.userId || "N/A";
-
-                        const row = `"${name}","${contact}","${devotee}","${date}","${uid}"`;
-                        csvContent += row + "\n";
-                    });
-
                     const encodedUri = encodeURI(csvContent);
                     const link = document.createElement("a");
                     link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "Restored_Data_Final.csv");
+                    link.setAttribute("download", "Data_5_Dec_Only.csv");
                     document.body.appendChild(link);
                     link.click();
                     
@@ -92,15 +110,10 @@
 
             } catch (error) {
                 log(`❌ ERROR: ${error.message}`);
-                
                 if (error.message.includes("requires an index")) {
-                    log("⚠️ ACTION REQUIRED: नीचे एक लिंक है, उस पर क्लिक करें!");
-                    // लिंक को क्लिक करने योग्य बनाना
                     const linkMatch = error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
                     if (linkMatch) {
                         log(`<a href="${linkMatch[0]}" target="_blank" style="color: yellow; text-decoration: underline;">👉 CLICK HERE TO CREATE INDEX 👈</a>`);
-                    } else {
-                        log("कंसोल (F12) खोलें और लिंक देखें।");
                     }
                 }
             } finally {
