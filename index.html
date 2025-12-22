@@ -18,7 +18,6 @@
         
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-        /* Ticket Design Ends */
         .ticket-edge-top {
             background-image: radial-gradient(circle at 10px top, transparent 10px, #ffffff 10px);
             background-position: -10px top;
@@ -34,7 +33,16 @@
         
         <div class="pt-8 pb-6 text-center bg-orange-50/80 border-b border-orange-100">
             <div class="flex flex-col items-center justify-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-20 w-auto mb-3 filter drop-shadow-sm scale-105">
+                
+                <div class="mb-3 text-orange-600">
+                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 20 C60 5 80 20 80 40 C80 60 50 80 50 80 C50 80 20 60 20 40 C20 20 40 5 50 20 Z" fill="#ea580c" opacity="0.8"/>
+                        <path d="M50 25 C55 15 70 25 70 40 C70 55 50 70 50 70 C50 70 30 55 30 40 C30 25 45 15 50 25 Z" fill="#fff7ed"/>
+                        <path d="M48 35 L48 60 M52 35 L52 60" stroke="#ea580c" stroke-width="2"/>
+                        <path d="M48 60 Q50 65 52 60" stroke="#ea580c" stroke-width="2" fill="none"/>
+                        <path d="M50 30 L50 35" stroke="#ea580c" stroke-width="2"/>
+                    </svg>
+                </div>
 
                 <h1 class="text-3xl font-extrabold text-orange-900 tracking-wide leading-tight">इस्कॉन उज्जैन</h1>
                 
@@ -80,28 +88,23 @@
                 </div>
                 
                 <form id="registration-form" class="space-y-5" autocomplete="off">
-                    
                     <div class="group">
                         <label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label>
                         <input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800">
                     </div>
-
                     <div class="group">
                         <label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label>
                         <input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800">
                     </div>
-
                     <div class="group">
                         <label class="block text-xs font-bold text-orange-800 uppercase mb-1">घर का पता (Address)</label>
                         <input type="text" id="home_address" required placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800">
                     </div>
-
                     <div class="group">
                         <label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label>
                         <input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800">
                         <p class="text-[10px] text-gray-500 mt-1">* Connected Devotee Name</p>
                     </div>
-                    
                     <button type="submit" id="submit-button" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">
                         हरे कृष्णा (Get Pass)
                     </button>
@@ -111,8 +114,7 @@
             <div id="card-section" class="hidden">
                 <div class="text-center mb-4">
                     <div class="bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-bold inline-flex items-center mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                        Pass Generated!
+                        ✓ Pass Generated!
                     </div>
                     <h2 class="text-lg font-bold text-gray-800">कृपया गेट पर दिखाएं (Show at Gate)</h2>
                 </div>
@@ -122,13 +124,23 @@
                         <div class="ticket-edge-top absolute top-0 left-0 w-full z-10"></div>
 
                         <div class="bg-white pt-6 pb-4 text-center border-b-2 border-orange-100 relative z-0 mt-2">
-                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-12 w-auto mx-auto mb-2 opacity-90">
+                             <div class="mx-auto mb-2 text-orange-600 w-12 h-12">
+                                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M50 20 C60 5 80 20 80 40 C80 60 50 80 50 80 C50 80 20 60 20 40 C20 20 40 5 50 20 Z" fill="#ea580c" opacity="0.8"/>
+                                    <path d="M50 25 C55 15 70 25 70 40 C70 55 50 70 50 70 C50 70 30 55 30 40 C30 25 45 15 50 25 Z" fill="#fff7ed"/>
+                                    <path d="M48 35 L48 60 M52 35 L52 60" stroke="#ea580c" stroke-width="3"/>
+                                    <path d="M48 60 Q50 65 52 60" stroke="#ea580c" stroke-width="3" fill="none"/>
+                                </svg>
+                             </div>
+                            
                             <h3 class="text-2xl font-extrabold text-orange-800 tracking-tight" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
                             <p class="text-sm font-bold text-orange-600 uppercase tracking-[0.15em] mt-1 border-y border-orange-100 inline-block px-4 py-0.5">Sunday Entry Pass</p>
                         </div>
 
                         <div class="p-6 space-y-5 relative">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="watermark" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 opacity-[0.04] pointer-events-none">
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 opacity-[0.05] pointer-events-none text-orange-900">
+                                <svg viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M50 20 C60 5 80 20 80 40 C80 60 50 80 50 80 C50 80 20 60 20 40 C20 20 40 5 50 20 Z"/></svg>
+                            </div>
 
                             <div>
                                 <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p>
@@ -190,14 +202,8 @@
                         <button id="reg-toggle-btn" onclick="toggleRegistrationStatus()" class="px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm"></button>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="exportToCSV()" class="flex-1 bg-white text-orange-800 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-orange-200 hover:bg-orange-100 flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                            Excel Export
-                        </button>
-                        <button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-red-200 hover:bg-red-50 flex items-center justify-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                            Clear Data
-                        </button>
+                        <button onclick="exportToCSV()" class="flex-1 bg-white text-orange-800 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-orange-200 hover:bg-orange-100 flex items-center justify-center gap-2">Excel Export</button>
+                        <button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-red-200 hover:bg-red-50 flex items-center justify-center gap-2">Clear Data</button>
                     </div>
                 </div>
 
@@ -214,7 +220,13 @@
             </div>
 
             <div id="admin-login-section" class="hidden text-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-16 w-auto mx-auto mb-4 opacity-80">
+                <div class="mx-auto mb-4 text-orange-600 w-16 h-16">
+                     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 20 C60 5 80 20 80 40 C80 60 50 80 50 80 C50 80 20 60 20 40 C20 20 40 5 50 20 Z" fill="#ea580c" opacity="0.8"/>
+                        <path d="M50 25 C55 15 70 25 70 40 C70 55 50 70 50 70 C50 70 30 55 30 40 C30 25 45 15 50 25 Z" fill="#fff7ed"/>
+                        <path d="M50 35 L50 60" stroke="#ea580c" stroke-width="2"/>
+                    </svg>
+                </div>
                 <h2 class="text-xl font-bold text-gray-800 mb-6 font-serif">Sevak Login Area</h2>
                 <form id="admin-login-form" class="space-y-4">
                     <input type="email" id="admin-email" required placeholder="Email ID" class="w-full p-3 bg-orange-50/50 border-2 border-orange-100 rounded-lg outline-none focus:border-orange-400 transition">
@@ -233,15 +245,16 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
-        // CONFIG
         const firebaseConfig = {
-            apiKey: "AIzaSyBOc6EeIc59S6COb80NJfYyl3GdRiI2H6k",
-            authDomain: "entrycard-1a28a.firebaseapp.com",
-            projectId: "entrycard-1a28a",
-            storageBucket: "entrycard-1a28a.firebasestorage.app",
-            messagingSenderId: "571342230056",
-            appId: "1:571342230056:web:de9f4c19cd820cee6cdb1d",
-            measurementId: "G-MQWXKCQ85H"
+            const firebaseConfig = {
+                apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
+                projectId: "prasadam-coupon-d1351",
+                storageBucket: "prasadam-coupon-d1351.firebasestorage.app",
+                messagingSenderId: "475680540304",
+                appId: "1:475680540304:web:d9b4836d7ea1a709f2fa15",
+                measurementId: "G-2VLPJ634P3"
+                authDomain: "prasadam-coupon-d1351.firebaseapp.com",
+};
         };
         const ADMIN_EMAILS = ["shivesh211204@gmail.com", "iskcon.sunday.feast@gmail.com"];
 
@@ -256,39 +269,22 @@
             login: document.getElementById('admin-login-section')
         };
 
-        // --- FAMILY LOGIC ---
-        function getFamilyProfiles() {
-            try { return JSON.parse(localStorage.getItem('iskcon_family_list_v6') || '[]'); } catch { return []; }
-        }
-
+        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v8') || '[]'); } catch { return []; } }
         function saveProfileToMemory(name, contact, homeAddress, devotee) {
             let profiles = getFamilyProfiles();
             profiles = profiles.filter(p => p.name.toLowerCase() !== name.trim().toLowerCase());
             profiles.unshift({ name: name.trim(), contact: contact.trim(), homeAddress: homeAddress.trim(), devotee: devotee.trim() });
             if(profiles.length > 8) profiles.pop();
-            localStorage.setItem('iskcon_family_list_v6', JSON.stringify(profiles));
+            localStorage.setItem('iskcon_family_list_v8', JSON.stringify(profiles));
         }
-        
-        window.clearFamilyData = function() {
-            if(confirm("सभी सहेजे गए भक्तों को हटा दें?")) {
-                localStorage.removeItem('iskcon_family_list_v6');
-                renderFamilyScreen();
-            }
-        };
-
-        // --- RENDER FUNCTIONS ---
+        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v8'); renderFamilyScreen(); } };
         function hideAll() { Object.values(views).forEach(el => el.classList.add('hidden')); }
 
         window.renderFamilyScreen = function() {
-            hideAll();
-            if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
-
+            hideAll(); if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
             const profiles = getFamilyProfiles();
-            if(profiles.length === 0) {
-                showNewForm();
-            } else {
-                const listEl = document.getElementById('family-list');
-                listEl.innerHTML = profiles.map((p, index) => `
+            if(profiles.length === 0) { showNewForm(); } else {
+                document.getElementById('family-list').innerHTML = profiles.map((p, index) => `
                     <div onclick="quickGenerate('${index}')" class="bg-white p-4 rounded-xl border-2 border-orange-50 flex justify-between items-center cursor-pointer hover:border-orange-300 transition shadow-sm group relative overflow-hidden">
                         <div class="absolute right-0 top-0 h-full w-1 bg-orange-200 group-hover:bg-orange-500 transition-all"></div>
                         <div class="overflow-hidden pl-2">
@@ -296,17 +292,15 @@
                             <p class="text-xs text-gray-500 font-medium">Linked: <span class="text-orange-700">${p.devotee}</span></p>
                         </div>
                         <div class="bg-orange-100 text-orange-600 rounded-full p-2 shadow-inner group-hover:bg-orange-600 group-hover:text-white transition mr-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:rotate-[-45deg] transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
                 views.family.classList.remove('hidden');
             }
         };
 
         window.showNewForm = function() {
-            hideAll();
-            if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
+            hideAll(); if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
             const profiles = getFamilyProfiles();
             document.getElementById('back-to-family-btn').classList.toggle('hidden', profiles.length === 0);
             if(profiles.length > 0) {
@@ -322,34 +316,28 @@
         window.renderAdminLogin = function() { hideAll(); views.login.classList.remove('hidden'); };
 
         window.quickGenerate = async function(index) {
-            const p = getFamilyProfiles()[index];
-            if(p) await generateTicket(p.name, p.contact, p.homeAddress, p.devotee);
+            const p = getFamilyProfiles()[index]; if(p) await generateTicket(p.name, p.contact, p.homeAddress, p.devotee);
         };
 
         async function generateTicket(name, contact, homeAddress, devotee) {
             if(!userId) { alert("Reloading..."); window.location.reload(); return; }
-            if(!/^\d{10}$/.test(contact)) { alert("कृपया मान्य 10 अंकों का मोबाइल नंबर दर्ज करें।"); return; }
-            
+            if(!/^\d{10}$/.test(contact)) { alert("Invalid Mobile Number"); return; }
             const btn = document.querySelector('button:not(.hidden)');
             const originalText = btn ? btn.innerText : "";
-            if(btn) { btn.disabled = true; btn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>'; }
-
+            if(btn) { btn.disabled = true; btn.innerHTML = '...'; }
             try {
                 const timestamp = new Date().toISOString();
                 const data = { name, contact, homeAddress, devotee, timestamp, userId };
                 await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/registrations/entryCard`), data);
                 await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), data);
                 saveProfileToMemory(name, contact, homeAddress, devotee);
-
                 document.getElementById('card-name').textContent = name;
                 document.getElementById('card-contact').textContent = contact;
                 document.getElementById('card-home-address').textContent = homeAddress;
                 document.getElementById('card-devotee').textContent = devotee;
                 document.getElementById('card-timestamp').textContent = new Date(timestamp).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short', hour12: true});
                 document.getElementById('card-user-id').textContent = 'ID:' + userId.substring(0,6).toUpperCase();
-
-                hideAll();
-                views.card.classList.remove('hidden');
+                hideAll(); views.card.classList.remove('hidden');
             } catch (e) { alert("Error: " + e.message); } 
             finally { if(btn) { btn.disabled = false; btn.innerText = originalText; } }
         }
@@ -363,67 +351,51 @@
             await generateTicket(name, contact, homeAddress, devotee);
         });
 
-        // --- FIREBASE INIT ---
         async function init() {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+            app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app);
             onSnapshot(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), (snap) => {
                 isRegistrationOpen = snap.exists() ? snap.data().isRegistrationOpen !== false : true;
                 const btn = document.getElementById('reg-toggle-btn');
-                if(btn) {
-                    btn.innerText = isRegistrationOpen ? "REGISTRATION OPEN" : "REGISTRATION CLOSED";
-                    btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm bg-green-600 text-white ring-2 ring-green-200" : "px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm bg-red-600 text-white ring-2 ring-red-200";
-                }
+                if(btn) { btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED"; btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-green-600 text-white" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-600 text-white"; }
                 if(!isRegistrationOpen && views.admin.classList.contains('hidden')) renderFamilyScreen();
             });
             onAuthStateChanged(auth, async (user) => {
                 if (!user) { await signInAnonymously(auth); } 
-                else { 
-                    userId = user.uid; 
-                    if(ADMIN_EMAILS.includes(user.email)) { hideAll(); views.admin.classList.remove('hidden'); fetchAttendees(); } 
-                    else { renderFamilyScreen(); }
-                }
+                else { userId = user.uid; if(ADMIN_EMAILS.includes(user.email)) { hideAll(); views.admin.classList.remove('hidden'); fetchAttendees(); } else { renderFamilyScreen(); } }
             });
         }
 
         window.downloadCard = async function() {
             const c = document.getElementById('entry-card');
-            // Use higher scale for better quality, ensure background is white
             const canvas = await html2canvas(c, { scale: 4, useCORS: true, backgroundColor: '#ffffff' });
-            const link = document.createElement('a'); link.href = canvas.toDataURL("image/png", 1.0); link.download = `ISKCON_SundayPass_${document.getElementById('card-name').textContent.replace(/\s+/g, '_')}.png`; link.click();
+            const link = document.createElement('a'); link.href = canvas.toDataURL("image/png"); link.download = `ISKCON_Pass.png`; link.click();
         };
 
         window.toggleRegistrationStatus = async () => { await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), {isRegistrationOpen:!isRegistrationOpen}, {merge:true}); };
         window.handleSignOut = async () => { await signOut(auth); window.location.reload(); };
         document.getElementById('admin-login-form').addEventListener('submit', async(e)=>{
-            e.preventDefault();
-            try { await signInWithEmailAndPassword(auth, document.getElementById('admin-email').value, document.getElementById('admin-password').value); }
-            catch { alert("गलत ईमेल या पासवर्ड (Wrong email/password)"); }
+            e.preventDefault(); try { await signInWithEmailAndPassword(auth, document.getElementById('admin-email').value, document.getElementById('admin-password').value); } catch { alert("Wrong email/password"); }
         });
 
         async function fetchAttendees() {
-            const t = document.getElementById('attendee-list');
-            t.innerHTML = '<tr><td class="p-6 text-center text-orange-400 font-bold animate-pulse" colspan="4">Loading Data...</td></tr>';
+            const t = document.getElementById('attendee-list'); t.innerHTML = '<tr><td class="p-4 text-center">Loading...</td></tr>';
             try {
                 const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-                const d = []; s.forEach(doc => d.push(doc.data()));
-                d.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                t.innerHTML = d.map(r => `<tr class="hover:bg-orange-50 border-b border-orange-100 transition"><td class="p-3 font-bold text-gray-800">${r.name}</td><td class="p-3 text-gray-600 font-mono text-xs">${r.contact}</td><td class="p-3 text-orange-700 font-medium truncate max-w-[100px]">${r.devotee || r.address || '-'}</td></tr>`).join('');
-            } catch(e) { t.innerHTML = '<tr><td class="p-4 text-center text-red-500 font-bold">Error loading data.</td></tr>'; }
+                const d = []; s.forEach(doc => d.push(doc.data())); d.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                t.innerHTML = d.map(r => `<tr class="hover:bg-orange-50 border-b border-orange-100"><td class="p-3 font-bold">${r.name}</td><td class="p-3 text-xs">${r.contact}</td><td class="p-3 font-medium truncate max-w-[100px] text-orange-800">${r.devotee || r.address || '-'}</td></tr>`).join('');
+            } catch { t.innerHTML = '<tr><td>Error</td></tr>'; }
         }
 
         window.exportToCSV = async function() {
             const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-            let csv = "\uFEFFName,Contact,Address,Devotee Linked,Timestamp\n"; // Add BOM for Excel Hindi support
+            let csv = "\uFEFFName,Contact,Address,Devotee,Time\n";
             s.forEach(d => { const r = d.data(); csv += `"${r.name}","${r.contact}","${r.homeAddress||''}","${r.devotee||r.address}","${r.timestamp}"\n`; });
-            const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='ISKCON_Sunday_List.csv'; a.click();
+            const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='Data.csv'; a.click();
         }
 
         window.clearAllData = async function() {
-            if(!confirm("⚠️ चेतावनी: क्या आप वाकई सारा डेटा हटाना चाहते हैं? यह वापस नहीं आएगा।")) return;
-            const p = prompt("सुरक्षा पासवर्ड दर्ज करें (Enter Password):"); if(p !== "a@10Prabhupada8") return alert("❌ गलत पासवर्ड! (Wrong Password)");
-            const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("✅ सारा डेटा सफलतापूर्वक हटा दिया गया है।");
+            if(!confirm("Are you sure?")) return; const p = prompt("Password:"); if(p !== "Prabhupada@108") return alert("Wrong Password!");
+            const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("Cleared!");
         }
         init();
     </script>
