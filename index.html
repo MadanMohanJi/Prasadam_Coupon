@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISKCON Event Pass</title>
+    <title>ISKCON Sunday Entry Pass</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Traditional/Spiritual Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap');
         
         body { 
             font-family: 'Noto Sans Devanagari', sans-serif; 
@@ -18,28 +18,13 @@
         
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-        /* Tilak Shape CSS */
-        .tilak-shape {
-            width: 20px;
-            height: 40px;
-            background-color: #fce7f3;
-            border: 2px solid #ea580c;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            border-top: 0;
-            margin: 0 auto 10px auto;
-            position: relative;
-        }
-        .tilak-line {
-            position: absolute;
-            top: 5px; left: 50%; transform: translateX(-50%);
-            width: 2px; height: 25px; background-color: #ea580c;
-        }
-
-        /* Ticket Design */
-        .spiritual-border {
-            border: 1px solid #fdba74;
-            box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.1);
+        /* Ticket Design Ends */
+        .ticket-edge-top {
+            background-image: radial-gradient(circle at 10px top, transparent 10px, #ffffff 10px);
+            background-position: -10px top;
+            background-size: 20px 20px;
+            background-repeat: repeat-x;
+            height: 20px;
         }
     </style>
 </head>
@@ -47,11 +32,16 @@
 
     <div id="app-container" class="w-full max-w-md bg-white shadow-2xl rounded-xl overflow-hidden border-t-4 border-orange-600 relative">
         
-        <div class="pt-8 pb-4 text-center bg-orange-50">
-            <div class="tilak-shape"><div class="tilak-line"></div></div>
-            
-            <h1 class="text-3xl font-bold text-orange-800 tracking-wide">इस्कॉन उज्जैन</h1>
-            <p class="text-xs font-semibold text-orange-600 uppercase tracking-widest mt-1">Founder Acharya: His Divine Grace<br>A.C. Bhaktivedanta Swami Prabhupada</p>
+        <div class="pt-8 pb-6 text-center bg-orange-50/80 border-b border-orange-100">
+            <div class="flex flex-col items-center justify-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-20 w-auto mb-3 filter drop-shadow-sm scale-105">
+
+                <h1 class="text-3xl font-extrabold text-orange-900 tracking-wide leading-tight">इस्कॉन उज्जैन</h1>
+                
+                <h2 class="text-xl font-bold text-orange-700 uppercase tracking-wider mt-1 mb-2 border-b-2 border-orange-200 inline-block pb-1">Sunday Entry Pass</h2>
+            </div>
+
+            <p class="text-[10px] font-medium text-orange-600 uppercase tracking-widest opacity-80 leading-relaxed mt-2">Founder Acharya: His Divine Grace<br>A.C. Bhaktivedanta Swami Prabhupada</p>
         </div>
 
         <div class="p-6 md:p-8">
@@ -72,7 +62,7 @@
                     <button onclick="clearFamilyData()" class="text-xs text-red-400 hover:text-red-600">Clear</button>
                 </div>
                 
-                <div id="family-list" class="space-y-3 mb-6">
+                <div id="family-list" class="space-y-3 mb-6 max-h-[40vh] overflow-y-auto pr-1">
                     </div>
                 
                 <button onclick="showNewForm()" class="w-full py-3 bg-orange-50 border border-orange-200 text-orange-800 rounded-lg text-sm font-bold hover:bg-orange-100 transition flex items-center justify-center gap-2">
@@ -120,52 +110,67 @@
 
             <div id="card-section" class="hidden">
                 <div class="text-center mb-4">
-                    <h2 class="text-xl font-bold text-gray-800">आपका पास (Entry Pass)</h2>
-                    <p class="text-xs text-gray-500">Please show this at the gate</p>
+                    <div class="bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-bold inline-flex items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                        Pass Generated!
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">कृपया गेट पर दिखाएं (Show at Gate)</h2>
                 </div>
 
                 <div class="flex justify-center mb-6">
-                    <div id="entry-card" class="w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg relative">
-                        <div class="bg-white border-b-2 border-orange-500 p-4 text-center">
-                            <h3 class="text-2xl font-bold text-gray-900 tracking-tight" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mt-1">Guest Entry Pass</p>
+                    <div id="entry-card" class="w-full bg-white border-2 border-orange-500 rounded-xl overflow-hidden shadow-xl relative">
+                        <div class="ticket-edge-top absolute top-0 left-0 w-full z-10"></div>
+
+                        <div class="bg-white pt-6 pb-4 text-center border-b-2 border-orange-100 relative z-0 mt-2">
+                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-12 w-auto mx-auto mb-2 opacity-90">
+                            <h3 class="text-2xl font-extrabold text-orange-800 tracking-tight" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
+                            <p class="text-sm font-bold text-orange-600 uppercase tracking-[0.15em] mt-1 border-y border-orange-100 inline-block px-4 py-0.5">Sunday Entry Pass</p>
                         </div>
 
-                        <div class="p-6 space-y-5">
+                        <div class="p-6 space-y-5 relative">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="watermark" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 opacity-[0.04] pointer-events-none">
+
                             <div>
-                                <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Guest Name</p>
-                                <p id="card-name" class="text-2xl font-bold text-gray-800 capitalize"></p>
+                                <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p>
+                                <p id="card-name" class="text-2xl font-bold text-gray-900 leading-tight font-serif"></p>
                             </div>
 
-                            <div class="border-t border-dashed border-gray-300"></div>
+                            <div class="border-t border-dashed border-orange-200"></div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Mobile</p>
+                                    <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p>
                                     <p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Connected With</p>
-                                    <p id="card-devotee" class="text-sm font-semibold text-orange-700"></p>
+                                    <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p>
+                                    <p id="card-devotee" class="text-sm font-bold text-orange-700"></p>
                                 </div>
                             </div>
                             
                             <div>
-                                <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Address</p>
-                                <p id="card-home-address" class="text-xs font-medium text-gray-600"></p>
+                                <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p>
+                                <p id="card-home-address" class="text-xs font-medium text-gray-600 leading-snug"></p>
                             </div>
                         </div>
 
-                        <div class="bg-gray-50 p-3 flex justify-between items-center border-t border-gray-100">
-                            <p id="card-timestamp" class="text-[10px] font-mono text-gray-400"></p>
-                            <p id="card-user-id" class="text-[10px] font-mono text-gray-300 uppercase"></p>
+                        <div class="bg-orange-50 p-3 flex justify-between items-end border-t border-orange-100">
+                            <div>
+                                <p class="text-[9px] uppercase text-orange-400 font-bold">Date & Time</p>
+                                <p id="card-timestamp" class="text-[11px] font-mono text-gray-600 font-semibold"></p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[9px] uppercase text-orange-400 font-bold">Pass ID</p>
+                                <p id="card-user-id" class="text-sm font-mono text-orange-800 font-bold uppercase tracking-wider"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="space-y-3">
-                    <button onclick="downloadCard()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow hover:bg-green-700">
-                        📥 डाउनलोड करें (Save)
+                    <button onclick="downloadCard()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow hover:bg-green-700 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        डाउनलोड करें (Download)
                     </button>
                     <button onclick="renderFamilyScreen()" class="w-full text-orange-700 bg-orange-50 border border-orange-200 py-3 rounded-lg text-sm font-bold hover:bg-orange-100">
                         + अन्य व्यक्ति जोड़ें
@@ -175,42 +180,48 @@
 
             <div id="admin-dashboard-section" class="hidden">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-800">Admin Seva</h2>
-                    <button onclick="handleSignOut()" class="text-xs text-red-500 font-bold">LOGOUT</button>
+                    <h2 class="text-lg font-bold text-gray-800">Admin Seva Panel</h2>
+                    <button onclick="handleSignOut()" class="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">LOGOUT</button>
                 </div>
                 
-                <div class="bg-orange-50 rounded-lg p-4 mb-4 border border-orange-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm font-bold text-orange-800">Registration</span>
-                        <button id="reg-toggle-btn" onclick="toggleRegistrationStatus()" class="px-3 py-1 rounded text-xs font-bold transition"></button>
+                <div class="bg-orange-50 rounded-xl p-4 mb-4 border border-orange-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-lg border border-orange-100">
+                        <span class="text-sm font-bold text-orange-900">Registration Status</span>
+                        <button id="reg-toggle-btn" onclick="toggleRegistrationStatus()" class="px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm"></button>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="exportToCSV()" class="flex-1 bg-white text-gray-700 py-2 rounded text-xs font-bold shadow-sm border">Excel</button>
-                        <button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2 rounded text-xs font-bold shadow-sm border">Clear</button>
+                    <div class="flex gap-3">
+                        <button onclick="exportToCSV()" class="flex-1 bg-white text-orange-800 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-orange-200 hover:bg-orange-100 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            Excel Export
+                        </button>
+                        <button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-red-200 hover:bg-red-50 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            Clear Data
+                        </button>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white">
-                    <div class="max-h-64 overflow-y-auto">
+                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <div class="max-h-80 overflow-y-auto">
                         <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-50 sticky top-0 text-gray-500 text-xs uppercase">
+                            <thead class="bg-orange-50/80 sticky top-0 text-orange-800 text-xs uppercase font-bold backdrop-blur-sm">
                                 <tr><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Devotee</th></tr>
                             </thead>
-                            <tbody id="attendee-list" class="divide-y divide-gray-100"></tbody>
+                            <tbody id="attendee-list" class="divide-y divide-orange-50"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
             <div id="admin-login-section" class="hidden text-center">
-                <div class="tilak-shape"><div class="tilak-line"></div></div>
-                <h2 class="text-xl font-bold text-gray-800 mb-6">Sevak Login</h2>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISKCON_logo.svg/1200px-ISKCON_logo.svg.png" alt="ISKCON Logo" class="h-16 w-auto mx-auto mb-4 opacity-80">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 font-serif">Sevak Login Area</h2>
                 <form id="admin-login-form" class="space-y-4">
-                    <input type="email" id="admin-email" required placeholder="Email" class="w-full p-3 bg-gray-50 border rounded-lg">
-                    <input type="password" id="admin-password" required placeholder="Password" class="w-full p-3 bg-gray-50 border rounded-lg">
-                    <button type="submit" class="w-full bg-orange-700 text-white py-3 rounded-lg font-bold">Login</button>
+                    <input type="email" id="admin-email" required placeholder="Email ID" class="w-full p-3 bg-orange-50/50 border-2 border-orange-100 rounded-lg outline-none focus:border-orange-400 transition">
+                    <input type="password" id="admin-password" required placeholder="Password" class="w-full p-3 bg-orange-50/50 border-2 border-orange-100 rounded-lg outline-none focus:border-orange-400 transition">
+                    <button type="submit" class="w-full bg-orange-800 text-white py-3 rounded-lg font-bold hover:bg-orange-900 transition shadow-md">Login Securely</button>
                 </form>
-                <button onclick="renderForm()" class="mt-6 text-sm text-gray-400">Cancel</button>
+                <button onclick="renderForm()" class="mt-6 text-sm text-gray-400 hover:text-orange-700 underline transition">Cancel & Go Back</button>
             </div>
 
         </div>
@@ -247,7 +258,7 @@
 
         // --- FAMILY LOGIC ---
         function getFamilyProfiles() {
-            try { return JSON.parse(localStorage.getItem('iskcon_family_list_v5') || '[]'); } catch { return []; }
+            try { return JSON.parse(localStorage.getItem('iskcon_family_list_v6') || '[]'); } catch { return []; }
         }
 
         function saveProfileToMemory(name, contact, homeAddress, devotee) {
@@ -255,12 +266,12 @@
             profiles = profiles.filter(p => p.name.toLowerCase() !== name.trim().toLowerCase());
             profiles.unshift({ name: name.trim(), contact: contact.trim(), homeAddress: homeAddress.trim(), devotee: devotee.trim() });
             if(profiles.length > 8) profiles.pop();
-            localStorage.setItem('iskcon_family_list_v5', JSON.stringify(profiles));
+            localStorage.setItem('iskcon_family_list_v6', JSON.stringify(profiles));
         }
         
         window.clearFamilyData = function() {
-            if(confirm("Delete all saved devotees?")) {
-                localStorage.removeItem('iskcon_family_list_v5');
+            if(confirm("सभी सहेजे गए भक्तों को हटा दें?")) {
+                localStorage.removeItem('iskcon_family_list_v6');
                 renderFamilyScreen();
             }
         };
@@ -278,13 +289,14 @@
             } else {
                 const listEl = document.getElementById('family-list');
                 listEl.innerHTML = profiles.map((p, index) => `
-                    <div onclick="quickGenerate('${index}')" class="bg-white p-4 rounded-lg border border-orange-100 flex justify-between items-center cursor-pointer hover:bg-orange-50 hover:border-orange-300 transition shadow-sm group">
-                        <div class="overflow-hidden">
-                            <p class="font-bold text-gray-800 group-hover:text-orange-800">${p.name}</p>
-                            <p class="text-xs text-gray-500">Linked: ${p.devotee}</p>
+                    <div onclick="quickGenerate('${index}')" class="bg-white p-4 rounded-xl border-2 border-orange-50 flex justify-between items-center cursor-pointer hover:border-orange-300 transition shadow-sm group relative overflow-hidden">
+                        <div class="absolute right-0 top-0 h-full w-1 bg-orange-200 group-hover:bg-orange-500 transition-all"></div>
+                        <div class="overflow-hidden pl-2">
+                            <p class="font-bold text-gray-800 text-lg group-hover:text-orange-800 font-serif">${p.name}</p>
+                            <p class="text-xs text-gray-500 font-medium">Linked: <span class="text-orange-700">${p.devotee}</span></p>
                         </div>
-                        <div class="bg-orange-50 text-orange-600 rounded-full p-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        <div class="bg-orange-100 text-orange-600 rounded-full p-2 shadow-inner group-hover:bg-orange-600 group-hover:text-white transition mr-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:rotate-[-45deg] transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                         </div>
                     </div>
                 `).join('');
@@ -316,11 +328,11 @@
 
         async function generateTicket(name, contact, homeAddress, devotee) {
             if(!userId) { alert("Reloading..."); window.location.reload(); return; }
-            if(!/^\d{10}$/.test(contact)) { alert("Please enter valid 10 digit mobile number."); return; }
+            if(!/^\d{10}$/.test(contact)) { alert("कृपया मान्य 10 अंकों का मोबाइल नंबर दर्ज करें।"); return; }
             
             const btn = document.querySelector('button:not(.hidden)');
             const originalText = btn ? btn.innerText : "";
-            if(btn) { btn.disabled = true; btn.innerText = "Processing..."; }
+            if(btn) { btn.disabled = true; btn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>'; }
 
             try {
                 const timestamp = new Date().toISOString();
@@ -333,8 +345,8 @@
                 document.getElementById('card-contact').textContent = contact;
                 document.getElementById('card-home-address').textContent = homeAddress;
                 document.getElementById('card-devotee').textContent = devotee;
-                document.getElementById('card-timestamp').textContent = new Date(timestamp).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'});
-                document.getElementById('card-user-id').textContent = userId.substring(0,6);
+                document.getElementById('card-timestamp').textContent = new Date(timestamp).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short', hour12: true});
+                document.getElementById('card-user-id').textContent = 'ID:' + userId.substring(0,6).toUpperCase();
 
                 hideAll();
                 views.card.classList.remove('hidden');
@@ -360,8 +372,8 @@
                 isRegistrationOpen = snap.exists() ? snap.data().isRegistrationOpen !== false : true;
                 const btn = document.getElementById('reg-toggle-btn');
                 if(btn) {
-                    btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED";
-                    btn.className = isRegistrationOpen ? "px-3 py-1 rounded text-xs font-bold bg-green-100 text-green-700" : "px-3 py-1 rounded text-xs font-bold bg-red-100 text-red-700";
+                    btn.innerText = isRegistrationOpen ? "REGISTRATION OPEN" : "REGISTRATION CLOSED";
+                    btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm bg-green-600 text-white ring-2 ring-green-200" : "px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm bg-red-600 text-white ring-2 ring-red-200";
                 }
                 if(!isRegistrationOpen && views.admin.classList.contains('hidden')) renderFamilyScreen();
             });
@@ -377,8 +389,9 @@
 
         window.downloadCard = async function() {
             const c = document.getElementById('entry-card');
-            const canvas = await html2canvas(c, { scale: 3, useCORS: true, backgroundColor:null });
-            const link = document.createElement('a'); link.href = canvas.toDataURL("image/png"); link.download = `ISKCON_Pass.png`; link.click();
+            // Use higher scale for better quality, ensure background is white
+            const canvas = await html2canvas(c, { scale: 4, useCORS: true, backgroundColor: '#ffffff' });
+            const link = document.createElement('a'); link.href = canvas.toDataURL("image/png", 1.0); link.download = `ISKCON_SundayPass_${document.getElementById('card-name').textContent.replace(/\s+/g, '_')}.png`; link.click();
         };
 
         window.toggleRegistrationStatus = async () => { await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), {isRegistrationOpen:!isRegistrationOpen}, {merge:true}); };
@@ -386,31 +399,31 @@
         document.getElementById('admin-login-form').addEventListener('submit', async(e)=>{
             e.preventDefault();
             try { await signInWithEmailAndPassword(auth, document.getElementById('admin-email').value, document.getElementById('admin-password').value); }
-            catch { alert("Wrong email/password"); }
+            catch { alert("गलत ईमेल या पासवर्ड (Wrong email/password)"); }
         });
 
         async function fetchAttendees() {
             const t = document.getElementById('attendee-list');
-            t.innerHTML = '<tr><td class="p-4 text-center text-gray-400" colspan="4">Loading...</td></tr>';
+            t.innerHTML = '<tr><td class="p-6 text-center text-orange-400 font-bold animate-pulse" colspan="4">Loading Data...</td></tr>';
             try {
                 const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
                 const d = []; s.forEach(doc => d.push(doc.data()));
                 d.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                t.innerHTML = d.map(r => `<tr class="hover:bg-gray-50 border-b border-gray-100"><td class="p-3 font-medium text-gray-800">${r.name}</td><td class="p-3 text-gray-600">${r.contact}</td><td class="p-3 text-gray-600 truncate max-w-[100px]">${r.devotee || r.address || '-'}</td></tr>`).join('');
-            } catch(e) { t.innerHTML = '<tr><td class="p-4 text-center text-red-400">Error</td></tr>'; }
+                t.innerHTML = d.map(r => `<tr class="hover:bg-orange-50 border-b border-orange-100 transition"><td class="p-3 font-bold text-gray-800">${r.name}</td><td class="p-3 text-gray-600 font-mono text-xs">${r.contact}</td><td class="p-3 text-orange-700 font-medium truncate max-w-[100px]">${r.devotee || r.address || '-'}</td></tr>`).join('');
+            } catch(e) { t.innerHTML = '<tr><td class="p-4 text-center text-red-500 font-bold">Error loading data.</td></tr>'; }
         }
 
         window.exportToCSV = async function() {
             const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-            let csv = "Name,Contact,Address,Devotee,Time\n";
+            let csv = "\uFEFFName,Contact,Address,Devotee Linked,Timestamp\n"; // Add BOM for Excel Hindi support
             s.forEach(d => { const r = d.data(); csv += `"${r.name}","${r.contact}","${r.homeAddress||''}","${r.devotee||r.address}","${r.timestamp}"\n`; });
-            const b = new Blob([csv],{type:'text/csv'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='Data.csv'; a.click();
+            const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='ISKCON_Sunday_List.csv'; a.click();
         }
 
         window.clearAllData = async function() {
-            if(!confirm("Are you sure?")) return;
-            const p = prompt("Enter Password:"); if(p !== "Prabhupada@108") return alert("Wrong Password!");
-            const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("Cleared!");
+            if(!confirm("⚠️ चेतावनी: क्या आप वाकई सारा डेटा हटाना चाहते हैं? यह वापस नहीं आएगा।")) return;
+            const p = prompt("सुरक्षा पासवर्ड दर्ज करें (Enter Password):"); if(p !== "Prabhupada@108") return alert("❌ गलत पासवर्ड! (Wrong Password)");
+            const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("✅ सारा डेटा सफलतापूर्वक हटा दिया गया है।");
         }
         init();
     </script>
