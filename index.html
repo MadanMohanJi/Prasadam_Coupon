@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISKCON Entry Pass</title>
+    <title>Krishna Balram Hall Pass</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap');
@@ -36,7 +36,6 @@
 
         <div class="pt-10 pb-8 text-center bg-orange-50/80 border-b border-orange-100">
             <div class="flex flex-col items-center justify-center">
-                
                 <h1 class="text-4xl font-extrabold text-orange-900 tracking-wide leading-tight mb-1">इस्कॉन उज्जैन</h1>
                 
                 <h2 class="text-xl font-bold text-orange-700 uppercase tracking-wider mt-1 mb-2 border-b-2 border-orange-200 inline-block pb-1">Krishna Balram Hall Pass</h2>
@@ -78,8 +77,10 @@
                 <form id="registration-form" class="space-y-5" autocomplete="off">
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">घर का पता (Address)</label><input type="text" id="home_address" required placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    
                     <button type="submit" id="submit-button" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">हरे कृष्णा (Get Pass)</button>
                 </form>
             </div>
@@ -183,16 +184,20 @@
             }
         };
 
+        // ✅ Updated: Clears both Name AND Contact
         window.showNewForm = function() {
             hideAll(); if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
             const profiles = getFamilyProfiles();
             document.getElementById('back-to-family-btn').classList.toggle('hidden', profiles.length === 0);
+            
             if(profiles.length > 0) {
-                document.getElementById('contact').value = profiles[0].contact;
                 document.getElementById('home_address').value = profiles[0].homeAddress;
                 document.getElementById('devotee').value = profiles[0].devotee;
                 document.getElementById('name').value = "";
-            } else { document.getElementById('registration-form').reset(); }
+                document.getElementById('contact').value = ""; 
+            } else { 
+                document.getElementById('registration-form').reset(); 
+            }
             views.form.classList.remove('hidden');
         };
 
@@ -309,7 +314,7 @@
         }
 
         window.clearAllData = async function() {
-            if(!confirm("Are you sure?")) return; const p = prompt("Password:"); if(p !== "Prabhupada@108") return alert("Wrong Password!");
+            if(!confirm("Are you sure?")) return; const p = prompt("Password:"); if(p !== "prabhupada@108") return alert("Wrong Password!");
             const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("Cleared!");
         }
         
