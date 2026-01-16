@@ -78,7 +78,6 @@
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     
-                    <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">घर का पता (Address)</label><input type="text" id="home_address" required placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     
                     <button type="submit" id="submit-button" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">हरे कृष्णा (Get Pass)</button>
@@ -108,7 +107,6 @@
                             <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
                             <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
                         </div>
-                        <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-home-address" class="text-xs font-medium text-gray-600 leading-snug"></p></div>
                     </div>
                     <div class="bg-orange-50 p-2 text-center border-t border-orange-100"><p class="text-[10px] uppercase text-orange-400 font-bold">Pass ID</p><p id="card-user-id" class="text-sm font-mono text-orange-800 font-bold uppercase tracking-wider"></p></div>
                 </div>
@@ -191,7 +189,6 @@
             document.getElementById('back-to-family-btn').classList.toggle('hidden', profiles.length === 0);
             
             if(profiles.length > 0) {
-                document.getElementById('home_address').value = profiles[0].homeAddress;
                 document.getElementById('devotee').value = profiles[0].devotee;
                 document.getElementById('name').value = "";
                 document.getElementById('contact').value = ""; 
@@ -205,7 +202,7 @@
         window.renderForm = () => renderFamilyScreen();
 
         window.quickGenerate = async function(index) {
-            const p = getFamilyProfiles()[index]; if(p) await generateTicket(p.name, p.contact, p.homeAddress, p.devotee);
+            const p = getFamilyProfiles()[index]; if(p) await generateTicket(p.name, p.contact, p.devotee);
         };
 
         async function generateTicket(name, contact, homeAddress, devotee) {
@@ -247,7 +244,6 @@
                 
                 document.getElementById('card-name').textContent = name;
                 document.getElementById('card-contact').textContent = contact;
-                document.getElementById('card-home-address').textContent = homeAddress;
                 document.getElementById('card-devotee').textContent = devotee;
                 document.getElementById('card-timestamp').textContent = new Date(existingTimestamp).toLocaleString('en-IN', {
                     weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
@@ -264,7 +260,6 @@
             await generateTicket(
                 document.getElementById('name').value,
                 document.getElementById('contact').value,
-                document.getElementById('home_address').value,
                 document.getElementById('devotee').value
             );
         });
