@@ -76,9 +76,17 @@
                     <div id="field-name" class="group"><label id="lbl-name" class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div id="field-contact" class="group"><label id="lbl-contact" class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 Digits" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div id="field-devotee" class="group"><label id="lbl-devotee" class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div id="field-address" class="group hidden"><label id="lbl-address" class="block text-xs font-bold text-orange-800 uppercase mb-1">पता (Address)</label><input type="text" id="address" placeholder="Address" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     
-                    <!-- UPDATED: Branch Dropdown -->
+                    <!-- UPDATED: Location (From) Dropdown instead of text address -->
+                    <div id="field-address" class="group hidden">
+                        <label id="lbl-address" class="block text-xs font-bold text-orange-800 uppercase mb-1">आप कहाँ से हैं? (Are you from?)</label>
+                        <select id="address" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md text-gray-800 cursor-pointer">
+                            <option value="" disabled selected>-- Select Location --</option>
+                            <option value="Ujjain">Ujjain (उज्जैन)</option>
+                            <option value="Outsider">Outsider (बाहर से)</option>
+                        </select>
+                    </div>
+                    
                     <div id="field-branch" class="group hidden">
                         <label id="lbl-branch" class="block text-xs font-bold text-orange-800 uppercase mb-1">शाखा (Branch)</label>
                         <select id="branch" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md text-gray-800 cursor-pointer">
@@ -124,419 +132,39 @@
                         </div>
                         
                         <div id="card-extras-container" class="grid grid-cols-2 gap-4 hidden mt-2 pt-2 border-t border-dashed border-orange-200">
-                            <div id="card-address-block" class="hidden"><p id="lbl-card-add" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-address" class="text-sm font-semibold text-gray-800"></p></div>
-                            <div id="card-branch-block" class="hidden"><p id="lbl-card-bra" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Branch</p><p id="card-branch" class="text-sm font-semibold text-gray-800"></p></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-orange-50 p-2 text-center border-t border-orange-100"><p class="text-[10px] uppercase text-orange-400 font-bold">Pass ID</p><p id="card-user-id" class="text-sm font-mono text-orange-800 font-bold uppercase tracking-wider"></p></div>
-                </div>
-                <div class="space-y-3"><button onclick="downloadCard()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow hover:bg-green-700 flex items-center justify-center gap-2">Download</button><button onclick="renderFamilyScreen()" class="w-full text-orange-700 bg-orange-50 border border-orange-200 py-3 rounded-lg text-sm font-bold hover:bg-orange-100">+ Add Person</button></div>
-            </div>
+                            <!-- Label translated dynamically, ID kept 'card-address' to maintain database integrity -->
+                            <div id="card-address-block" class="hidden"><p id="lbl-card-add" class="text-[10pxHere is the updated code replacing the address field with an "Are you from?" question. 
 
-            <div id="admin-dashboard-section" class="hidden">
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100"><h2 class="text-lg font-bold text-gray-800">Admin Seva Panel</h2><button onclick="handleSignOut()" class="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">LOGOUT</button></div>
-                
-                <!-- Admin App Settings Configurator -->
-                <div class="bg-white p-4 rounded-xl border border-orange-200 shadow-sm mb-4">
-                    <h3 class="text-sm font-bold text-orange-900 mb-3 border-b border-orange-100 pb-1">⚙️ App Settings</h3>
-                    <div class="space-y-3">
-                        <div><label class="text-[10px] uppercase text-orange-600 font-bold">Main Heading</label><input type="text" id="admin-heading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
-                        <div><label class="text-[10px] uppercase text-orange-600 font-bold">Sub Heading</label><input type="text" id="admin-subheading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
-                        
-                        <!-- NEW: Button Text Customization -->
-                        <div>
-                            <label class="text-[10px] uppercase text-orange-600 font-bold">Submit Button Text</label>
-                            <input type="text" id="admin-btn-text-input" placeholder="Leave blank for Default" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400">
-                        </div>
+While you mentioned a checkbox, I've used **radio buttons** here since "Ujjain" and "Outsider" are mutually exclusive options (a user can only be one or the other). I've styled this with Tailwind CSS to keep it clean and ready to drop into your UI.
 
-                        <div class="pt-1 border-t border-orange-100 mt-2">
-                            <p class="text-[10px] uppercase text-orange-600 font-bold mb-2">Display Language</p>
-                            <select id="admin-language" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400 font-bold text-gray-700">
-                                <option value="both">Hindi + English (Default)</option>
-                                <option value="hi">Hindi Only (हिंदी)</option>
-                                <option value="en">English Only</option>
-                            </select>
-                        </div>
+```jsx
+<div className="flex flex-col mb-4">
+  <label className="mb-2 font-medium text-gray-700">
+    Are you from?
+  </label>
+  <div className="flex items-center gap-6 mt-1">
+    
+    {/* Ujjain Option */}
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input 
+        type="radio" 
+        name="origin_location" 
+        value="ujjain" 
+        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+      />
+      <span className="text-gray-700">Ujjain</span>
+    </label>
 
-                        <div class="pt-2">
-                            <p class="text-[10px] uppercase text-orange-600 font-bold mb-2">Enable/Disable Fields</p>
-                            <div class="grid grid-cols-2 gap-3 bg-orange-50 p-3 rounded border border-orange-100">
-                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-name" class="accent-orange-600 w-4 h-4"> Name</label>
-                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-contact" class="accent-orange-600 w-4 h-4"> Mobile No.</label>
-                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-devotee" class="accent-orange-600 w-4 h-4"> Devotee</label>
-                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-address" class="accent-orange-600 w-4 h-4"> Address</label>
-                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-branch" class="accent-orange-600 w-4 h-4"> Branch</label>
-                            </div>
-                        </div>
-                        <button onclick="saveAdminSettings()" class="w-full bg-orange-600 text-white py-2 mt-2 rounded font-bold shadow hover:bg-orange-700 text-sm transition">Save Layout Settings</button>
-                    </div>
-                </div>
+    {/* Outsider Option */}
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input 
+        type="radio" 
+        name="origin_location" 
+        value="outsider" 
+        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+      />
+      <span className="text-gray-700">Outsider</span>
+    </label>
 
-                <div class="bg-orange-50 rounded-xl p-4 mb-4 border border-orange-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-lg border border-orange-100"><span class="text-sm font-bold text-orange-900">Registration Status</span><button id="reg-toggle-btn" onclick="toggleRegistrationStatus()" class="px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm"></button></div>
-                    <div class="flex gap-3"><button onclick="exportToCSV()" class="flex-1 bg-white text-orange-800 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-orange-200 hover:bg-orange-100">Excel Export</button><button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-red-200 hover:bg-red-50">Clear Data</button></div>
-                </div>
-                
-                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm"><div class="max-h-80 overflow-y-auto"><table class="w-full text-left text-sm"><thead class="bg-orange-50/80 sticky top-0 text-orange-800 text-xs uppercase font-bold"><tr><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Info</th></tr></thead><tbody id="attendee-list" class="divide-y divide-orange-50"></tbody></table></div></div>
-            </div>
-            
-            <div id="admin-login-section" class="hidden text-center">
-                <h2 class="text-xl font-bold text-gray-800 mb-6 font-serif mt-8">Sevak Login Area</h2>
-                <form id="admin-login-form" class="space-y-4"><input type="email" id="admin-email" required placeholder="Email ID" class="w-full p-3 bg-orange-50/50 border-2 border-orange-100 rounded-lg outline-none focus:border-orange-400"><input type="password" id="admin-password" required placeholder="Password" class="w-full p-3 bg-orange-50/50 border-2 border-orange-100 rounded-lg outline-none focus:border-orange-400"><button type="submit" class="w-full bg-orange-800 text-white py-3 rounded-lg font-bold hover:bg-orange-900 shadow-md">Login Securely</button></form>
-                <button onclick="renderForm()" class="mt-6 text-sm text-gray-400 hover:text-orange-700 underline transition">Cancel & Go Back</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, getDocs, writeBatch, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyDlyRBUS_Dg2qXuSVHWjRlnE2ZjTxPEXbo",
-            authDomain: "prasadam-coupon-d1351.firebaseapp.com",
-            projectId: "prasadam-coupon-d1351",
-            storageBucket: "prasadam-coupon-d1351.firebasestorage.app",
-            messagingSenderId: "475680540304",
-            appId: "1:475680540304:web:d9b4836d7ea1a709f2fa15",
-            measurementId: "G-2VLPJ634P3"
-        };
-        const ADMIN_EMAILS = ["shivesh211204@gmail.com", "iskcon.sunday.feast@gmail.com"];
-
-        let app, db, auth, userId = null, isRegistrationOpen = true;
-        
-        // Extended App Config state including Custom Button Text
-        let appConfig = { askName: true, askContact: true, askDevotee: true, askAddress: false, askBranch: false, appLang: 'both', customBtnText: "" }; 
-
-        const views = { loading: document.getElementById('loading-state'), closed: document.getElementById('closed-section'), family: document.getElementById('family-section'), form: document.getElementById('form-section'), card: document.getElementById('card-section'), admin: document.getElementById('admin-dashboard-section'), login: document.getElementById('admin-login-section') };
-        const errorMsg = document.getElementById('loading-error');
-
-        // Dynamic Translation System
-        const translations = {
-            regTitle: { hi: "अतिथि पंजीकरण", en: "Guest Registration", both: "अतिथि पंजीकरण" },
-            nameL: { hi: "पूरा नाम", en: "Full Name", both: "पूरा नाम (Full Name)" },
-            contactL: { hi: "मोबाइल नंबर", en: "Mobile No.", both: "मोबाइल नंबर (Mobile)" },
-            devoteeL: { hi: "किससे जुड़े हैं?", en: "Connected Devotee?", both: "मंदिर में किससे जुड़े हैं?" },
-            addressL: { hi: "पता", en: "Address", both: "पता (Address)" },
-            branchL: { hi: "शाखा", en: "Branch", both: "शाखा (Branch)" },
-            btnLabel: { hi: "हरे कृष्णा (पास प्राप्त करें)", en: "Hare Krishna (Get Pass)", both: "हरे कृष्णा (Get Pass)" },
-            cardVis: { hi: "अतिथि का नाम", en: "Visitor Name", both: "Visitor Name" },
-            cardMob: { hi: "मोबाइल", en: "Mobile", both: "Mobile" },
-            cardDev: { hi: "किससे जुड़े हैं", en: "Connected With", both: "Connected With" },
-            cardAdd: { hi: "पता", en: "Address", both: "Address" },
-            cardBra: { hi: "शाखा", en: "Branch", both: "Branch" },
-            showGate: { hi: "कृपया गेट पर दिखाएं", en: "Please show at gate", both: "कृपया गेट पर दिखाएं" },
-            newEntryBtn: { hi: "<span>+</span> नया पास बनाएँ", en: "<span>+</span> New Entry", both: "<span>+</span> नया पास बनाएँ (New Entry)" }
-        };
-
-        function applyLanguage(mode) {
-            const setTxt = (id, key) => { 
-                const el = document.getElementById(id); 
-                if(el && translations[key]) el.innerHTML = translations[key][mode] || translations[key]['both']; 
-            };
-            
-            setTxt('lbl-reg-title', 'regTitle');
-            setTxt('lbl-name', 'nameL');
-            setTxt('lbl-contact', 'contactL');
-            setTxt('lbl-devotee', 'devoteeL');
-            setTxt('lbl-address', 'addressL');
-            setTxt('lbl-branch', 'branchL');
-            
-            // Check if Custom Button text is applied
-            if (appConfig.customBtnText && appConfig.customBtnText.trim() !== "") {
-                document.getElementById('lbl-submit').innerHTML = appConfig.customBtnText;
-            } else {
-                setTxt('lbl-submit', 'btnLabel');
-            }
-            
-            setTxt('lbl-card-vis', 'cardVis');
-            setTxt('lbl-card-mob', 'cardMob');
-            setTxt('lbl-card-dev', 'cardDev');
-            setTxt('lbl-card-add', 'cardAdd');
-            setTxt('lbl-card-bra', 'cardBra');
-            
-            setTxt('lbl-show-gate', 'showGate');
-            setTxt('lbl-new-entry', 'newEntryBtn');
-        }
-
-        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v11') || '[]'); } catch { return []; } }
-        
-        function saveProfileToMemory(userData) {
-            let profiles = getFamilyProfiles();
-            const matchName = userData.name || userData.contact || Date.now().toString(); 
-            profiles = profiles.filter(p => (p.name || p.contact) !== matchName);
-            profiles.unshift(userData);
-            if(profiles.length > 8) profiles.pop();
-            localStorage.setItem('iskcon_family_list_v11', JSON.stringify(profiles));
-        }
-
-        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v11'); renderFamilyScreen(); } };
-        function hideAll() { Object.values(views).forEach(el => el.classList.add('hidden')); }
-
-        window.renderFamilyScreen = function() {
-            hideAll(); if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
-            const profiles = getFamilyProfiles();
-            if(profiles.length === 0) { showNewForm(); } else {
-                document.getElementById('family-list').innerHTML = profiles.map((p, index) => `
-                    <div onclick="quickGenerate('${index}')" class="bg-white p-4 rounded-xl border-2 border-orange-50 flex justify-between items-center cursor-pointer hover:border-orange-300 transition shadow-sm group relative overflow-hidden">
-                        <div class="absolute right-0 top-0 h-full w-1 bg-orange-200 group-hover:bg-orange-500 transition-all"></div>
-                        <div class="overflow-hidden pl-2">
-                            <p class="font-bold text-gray-800 text-lg group-hover:text-orange-800 font-serif">${p.name || 'Guest User'}</p>
-                            ${p.devotee ? `<p class="text-xs text-gray-500 font-medium">Linked: <span class="text-orange-700">${p.devotee}</span></p>` : ''}
-                        </div>
-                        <div class="bg-orange-100 text-orange-600 rounded-full p-2 shadow-inner group-hover:bg-orange-600 group-hover:text-white transition mr-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                        </div>
-                    </div>`).join('');
-                views.family.classList.remove('hidden');
-            }
-        };
-
-        window.showNewForm = function() {
-            hideAll(); if(!isRegistrationOpen) { views.closed.classList.remove('hidden'); return; }
-            const profiles = getFamilyProfiles();
-            document.getElementById('back-to-family-btn').classList.toggle('hidden', profiles.length === 0);
-            
-            if(profiles.length > 0) {
-                document.getElementById('devotee').value = profiles[0].devotee || "";
-                document.getElementById('address').value = profiles[0].address || "";
-                document.getElementById('branch').value = profiles[0].branch || "";
-                document.getElementById('name').value = "";
-                document.getElementById('contact').value = ""; 
-            } else { 
-                document.getElementById('registration-form').reset(); 
-            }
-            views.form.classList.remove('hidden');
-        };
-
-        window.renderAdminLogin = function() { hideAll(); views.login.classList.remove('hidden'); };
-        window.renderForm = () => renderFamilyScreen();
-
-        window.quickGenerate = async function(index) {
-            const p = getFamilyProfiles()[index]; 
-            if(p) await processTicketGeneration(p.name || "", p.contact || "", p.devotee || "", p.address || "", p.branch || "");
-        };
-
-        window.saveAdminSettings = async () => {
-            try {
-                const configToSave = {
-                    heading: document.getElementById('admin-heading-input').value || "इस्कॉन उज्जैन",
-                    subheading: document.getElementById('admin-subheading-input').value || "Krishna Balram Hall Pass",
-                    customBtnText: document.getElementById('admin-btn-text-input').value,
-                    askName: document.getElementById('admin-ask-name').checked,
-                    askContact: document.getElementById('admin-ask-contact').checked,
-                    askDevotee: document.getElementById('admin-ask-devotee').checked,
-                    askAddress: document.getElementById('admin-ask-address').checked,
-                    askBranch: document.getElementById('admin-ask-branch').checked,
-                    appLang: document.getElementById('admin-language').value || 'both'
-                };
-                
-                await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), configToSave, {merge:true});
-                alert("Settings Saved & Live Successfully!");
-            } catch(e) {
-                alert("Error saving settings: " + e.message);
-            }
-        };
-
-        async function processTicketGeneration(name, contact, devotee, address, branch) {
-            if(!userId) { alert("Reloading..."); window.location.reload(); return; }
-            
-            name = (name || "").trim();
-            contact = (contact || "").trim();
-            devotee = (devotee || "").trim();
-            address = (address || "").trim();
-            branch = (branch || "").trim();
-
-            if(appConfig.askContact && !/^\d{10}$/.test(contact)) { alert("Invalid Mobile Number"); return; }
-            
-            const btn = document.querySelector('button:not(.hidden)');
-            const originalText = btn ? btn.innerText : "";
-            if(btn) { btn.disabled = true; btn.innerText = 'Verifying...'; }
-            
-            try {
-                const todayStr = new Date().toISOString().split('T')[0]; 
-                let isDuplicate = false;
-                let existingTimestamp = new Date().toISOString();
-
-                if (appConfig.askContact && contact) {
-                    const q = query(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), where("contact", "==", contact));
-                    const snapshot = await getDocs(q);
-                    snapshot.forEach(doc => {
-                        const d = doc.data();
-                        const dbDate = new Date(d.timestamp).toISOString().split('T')[0];
-                        if (d.name.toLowerCase().trim() === name.toLowerCase() && dbDate === todayStr) {
-                            isDuplicate = true;
-                            existingTimestamp = d.timestamp;
-                        }
-                    });
-                }
-
-                const dataObj = { name, contact, devotee, address, branch, timestamp: existingTimestamp, userId };
-
-                if (!isDuplicate) {
-                    dataObj.timestamp = new Date().toISOString();
-                    await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/registrations/entryCard`), dataObj);
-                    await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), dataObj);
-                } else {
-                    alert("⚠️ आपकी आज की हाजिरी पहले ही लग चुकी है। (Attendance already marked!)");
-                }
-
-                saveProfileToMemory(dataObj);
-                
-                document.getElementById('card-name-block').classList.toggle('hidden', !appConfig.askName);
-                if(appConfig.askName) document.getElementById('card-name').textContent = name || "Guest";
-                
-                document.getElementById('card-contact-block').classList.toggle('hidden', !appConfig.askContact);
-                if(appConfig.askContact) document.getElementById('card-contact').textContent = contact;
-                
-                document.getElementById('card-devotee-block').classList.toggle('hidden', !appConfig.askDevotee);
-                if(appConfig.askDevotee) document.getElementById('card-devotee').textContent = devotee;
-
-                const extrasContainer = document.getElementById('card-extras-container');
-                const addrBlock = document.getElementById('card-address-block');
-                const branchBlock = document.getElementById('card-branch-block');
-                
-                let showExtras = false;
-                if(appConfig.askAddress && address) { addrBlock.classList.remove('hidden'); document.getElementById('card-address').textContent = address; showExtras = true; } else { addrBlock.classList.add('hidden'); }
-                if(appConfig.askBranch && branch) { branchBlock.classList.remove('hidden'); document.getElementById('card-branch').textContent = branch; showExtras = true; } else { branchBlock.classList.add('hidden'); }
-                extrasContainer.classList.toggle('hidden', !showExtras);
-
-                document.getElementById('card-timestamp').textContent = new Date(dataObj.timestamp).toLocaleString('en-IN', {
-                    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
-                });
-                document.getElementById('card-user-id').textContent = 'ID:' + userId.substring(0,6).toUpperCase();
-                hideAll(); views.card.classList.remove('hidden');
-
-            } catch (e) { alert("Error: " + e.message); console.error(e); } 
-            finally { if(btn) { btn.disabled = false; btn.innerText = originalText; } }
-        }
-
-        document.getElementById('registration-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await processTicketGeneration(
-                document.getElementById('name').value,
-                document.getElementById('contact').value,
-                document.getElementById('devotee').value,
-                document.getElementById('address').value,
-                document.getElementById('branch').value
-            );
-        });
-
-        function applyFieldSettings(id, isEnabled) {
-            const container = document.getElementById(`field-${id}`);
-            const input = document.getElementById(id);
-            if(container) container.classList.toggle('hidden', !isEnabled);
-            if(input) {
-                if(isEnabled) input.setAttribute('required', 'true');
-                else input.removeAttribute('required');
-            }
-        }
-
-        async function init() {
-            app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app);
-            
-            onSnapshot(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), (snap) => {
-                const data = snap.exists() ? snap.data() : {};
-                
-                isRegistrationOpen = data.isRegistrationOpen !== false;
-                appConfig.askName = data.askName !== false; 
-                appConfig.askContact = data.askContact !== false;
-                appConfig.askDevotee = data.askDevotee !== false;
-                appConfig.askAddress = !!data.askAddress;
-                appConfig.askBranch = !!data.askBranch;
-                appConfig.appLang = data.appLang || 'both';
-                appConfig.customBtnText = data.customBtnText || "";
-
-                const customHeading = data.heading || "इस्कॉन उज्जैन";
-                const customSubheading = data.subheading || "Krishna Balram Hall Pass";
-
-                applyFieldSettings('name', appConfig.askName);
-                applyFieldSettings('contact', appConfig.askContact);
-                applyFieldSettings('devotee', appConfig.askDevotee);
-                applyFieldSettings('address', appConfig.askAddress);
-                applyFieldSettings('branch', appConfig.askBranch);
-                
-                // Apply language UI translations and Custom Button overrides
-                applyLanguage(appConfig.appLang);
-
-                const btn = document.getElementById('reg-toggle-btn');
-                if(btn) { btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED"; btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-green-600 text-white" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-600 text-white"; }
-                
-                document.getElementById('main-heading').innerText = customHeading;
-                document.getElementById('sub-heading').innerText = customSubheading;
-                document.getElementById('ticket-main-heading').innerText = customHeading;
-                document.getElementById('ticket-sub-heading').innerText = customSubheading;
-
-                document.getElementById('admin-heading-input').value = customHeading;
-                document.getElementById('admin-subheading-input').value = customSubheading;
-                document.getElementById('admin-btn-text-input').value = appConfig.customBtnText;
-                document.getElementById('admin-ask-name').checked = appConfig.askName;
-                document.getElementById('admin-ask-contact').checked = appConfig.askContact;
-                document.getElementById('admin-ask-devotee').checked = appConfig.askDevotee;
-                document.getElementById('admin-ask-address').checked = appConfig.askAddress;
-                document.getElementById('admin-ask-branch').checked = appConfig.askBranch;
-                document.getElementById('admin-language').value = appConfig.appLang;
-
-                if(!isRegistrationOpen && views.admin.classList.contains('hidden')) renderFamilyScreen();
-            }, (error) => {
-                errorMsg.innerText = "Error: Check Firestore Rules.";
-                errorMsg.classList.remove('hidden');
-            });
-
-            onAuthStateChanged(auth, async (user) => {
-                if (!user) { await signInAnonymously(auth); } 
-                else { userId = user.uid; if(ADMIN_EMAILS.includes(user.email)) { hideAll(); views.admin.classList.remove('hidden'); fetchAttendees(); } else { renderFamilyScreen(); } }
-            });
-        }
-
-        window.downloadCard = async function() {
-            const c = document.getElementById('entry-card');
-            const canvas = await html2canvas(c, { scale: 4, useCORS: true, backgroundColor: '#ffffff' });
-            const link = document.createElement('a'); link.href = canvas.toDataURL("image/png"); link.download = `ISKCON_Pass.png`; link.click();
-        };
-
-        window.toggleRegistrationStatus = async () => { await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), {isRegistrationOpen:!isRegistrationOpen}, {merge:true}); };
-        window.handleSignOut = async () => { await signOut(auth); window.location.reload(); };
-        document.getElementById('admin-login-form').addEventListener('submit', async(e)=>{ e.preventDefault(); try { await signInWithEmailAndPassword(auth, document.getElementById('admin-email').value, document.getElementById('admin-password').value); } catch { alert("Wrong email/password"); } });
-
-        async function fetchAttendees() {
-            const t = document.getElementById('attendee-list'); t.innerHTML = '<tr><td class="p-4 text-center">Loading...</td></tr>';
-            try {
-                const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-                const d = []; s.forEach(doc => d.push(doc.data())); d.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                t.innerHTML = d.map(r => `
-                    <tr class="hover:bg-orange-50 border-b border-orange-100">
-                        <td class="p-3 font-bold">${r.name || '-'}</td>
-                        <td class="p-3 text-xs">${r.contact || '-'}</td>
-                        <td class="p-3 font-medium text-orange-800 text-xs">
-                            ${r.devotee ? `<div class="truncate max-w-[120px]">D: ${r.devotee}</div>` : ''}
-                            ${r.branch ? `<div class="truncate max-w-[120px] text-gray-500">B: ${r.branch}</div>` : ''}
-                        </td>
-                    </tr>`).join('');
-            } catch { t.innerHTML = '<tr><td>Error</td></tr>'; }
-        }
-
-        window.exportToCSV = async function() {
-            const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-            let csv = "\uFEFFName,Contact,Devotee,Address,Branch,Time\n";
-            s.forEach(d => { 
-                const r = d.data(); 
-                csv += `"${r.name || ''}","${r.contact || ''}","${r.devotee || ''}","${r.address || ''}","${r.branch || ''}","${r.timestamp}"\n`; 
-            });
-            const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='Data.csv'; a.click();
-        }
-
-        window.clearAllData = async function() {
-            if(!confirm("Are you sure?")) return; const p = prompt("Password:"); if(p !== "prabhupada@108") return alert("Wrong Password!");
-            const b = writeBatch(db); const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`)); s.forEach(d => b.delete(d.ref)); await b.commit(); fetchAttendees(); alert("Cleared!");
-        }
-        
-        setTimeout(() => { if(!views.loading.classList.contains('hidden')) errorMsg.classList.remove('hidden'); }, 8000);
-        init();
-    </script>
-</body>
-</html>
+  </div>
+</div>
