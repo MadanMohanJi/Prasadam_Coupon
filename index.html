@@ -74,11 +74,10 @@
                     <h2 class="text-xl font-bold text-gray-800">अतिथि पंजीकरण</h2>
                 </div>
                 <form id="registration-form" class="space-y-5" autocomplete="off">
-                    <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    
-                    <!-- Dynamic Fields (Hidden by default) -->
+                    <!-- Fully Dynamic Fields -->
+                    <div id="field-name" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-contact" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-devotee" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div id="field-address" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पता (Address)</label><input type="text" id="address" placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div id="field-branch" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">शाखा (Branch)</label><input type="text" id="branch" placeholder="Branch Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
 
@@ -94,28 +93,32 @@
                 <div id="entry-card" class="w-full bg-white border-2 border-orange-500 rounded-xl overflow-hidden shadow-xl relative mb-6">
                     <div class="ticket-edge-top absolute top-0 left-0 w-full z-10"></div>
                     <div class="bg-white pt-6 pb-2 text-center border-b border-orange-100 relative z-0 mt-2">
-                        <!-- Dynamic Ticket Headings -->
                         <h3 id="ticket-main-heading" class="text-2xl font-extrabold text-orange-800 tracking-wide mt-2" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
                         <p id="ticket-sub-heading" class="text-xs font-bold text-orange-600 uppercase tracking-widest">Krishna Balram Hall Pass</p>
-                        
                         <div class="mt-3 bg-orange-50 py-2 border-y border-orange-100">
                             <p id="card-timestamp" class="text-xl font-bold text-orange-800 font-mono"></p>
                         </div>
                     </div>
+                    
                     <div class="p-6 space-y-4 relative">
-                        <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p><p id="card-name" class="text-3xl font-bold text-gray-900 leading-tight font-serif"></p></div>
-                        <div class="border-t border-dashed border-orange-200"></div>
+                        <!-- Dynamic Ticket Fields -->
+                        <div id="card-name-block">
+                            <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p>
+                            <p id="card-name" class="text-3xl font-bold text-gray-900 leading-tight font-serif"></p>
+                        </div>
+                        <div id="card-divider" class="border-t border-dashed border-orange-200"></div>
+                        
                         <div class="grid grid-cols-2 gap-4">
-                            <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
-                            <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
+                            <div id="card-contact-block"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
+                            <div id="card-devotee-block"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
                         </div>
                         
-                        <!-- Dynamic Ticket Fields -->
                         <div id="card-extras-container" class="grid grid-cols-2 gap-4 hidden mt-2 pt-2 border-t border-dashed border-orange-200">
                             <div id="card-address-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-address" class="text-sm font-semibold text-gray-800"></p></div>
                             <div id="card-branch-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Branch</p><p id="card-branch" class="text-sm font-semibold text-gray-800"></p></div>
                         </div>
                     </div>
+                    
                     <div class="bg-orange-50 p-2 text-center border-t border-orange-100"><p class="text-[10px] uppercase text-orange-400 font-bold">Pass ID</p><p id="card-user-id" class="text-sm font-mono text-orange-800 font-bold uppercase tracking-wider"></p></div>
                 </div>
                 <div class="space-y-3"><button onclick="downloadCard()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold shadow hover:bg-green-700 flex items-center justify-center gap-2">Download</button><button onclick="renderFamilyScreen()" class="w-full text-orange-700 bg-orange-50 border border-orange-200 py-3 rounded-lg text-sm font-bold hover:bg-orange-100">+ Add Person</button></div>
@@ -124,16 +127,22 @@
             <div id="admin-dashboard-section" class="hidden">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100"><h2 class="text-lg font-bold text-gray-800">Admin Seva Panel</h2><button onclick="handleSignOut()" class="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">LOGOUT</button></div>
                 
-                <!-- NEW: Admin App Settings Configurator -->
+                <!-- NEW: Admin App Settings Configurator (Expanded) -->
                 <div class="bg-white p-4 rounded-xl border border-orange-200 shadow-sm mb-4">
                     <h3 class="text-sm font-bold text-orange-900 mb-3 border-b border-orange-100 pb-1">⚙️ App Settings</h3>
                     <div class="space-y-3">
                         <div><label class="text-[10px] uppercase text-orange-600 font-bold">Main Heading</label><input type="text" id="admin-heading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
                         <div><label class="text-[10px] uppercase text-orange-600 font-bold">Sub Heading</label><input type="text" id="admin-subheading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
                         
-                        <div class="flex items-center gap-6 pt-2">
-                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-address" class="accent-orange-600 w-4 h-4"> Enable Address Field</label>
-                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-branch" class="accent-orange-600 w-4 h-4"> Enable Branch Field</label>
+                        <div class="pt-2">
+                            <p class="text-[10px] uppercase text-orange-600 font-bold mb-2">Enable/Disable Fields</p>
+                            <div class="grid grid-cols-2 gap-3 bg-orange-50 p-3 rounded border border-orange-100">
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-name" class="accent-orange-600 w-4 h-4"> Name</label>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-contact" class="accent-orange-600 w-4 h-4"> Mobile No.</label>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-devotee" class="accent-orange-600 w-4 h-4"> Devotee</label>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-address" class="accent-orange-600 w-4 h-4"> Address</label>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-branch" class="accent-orange-600 w-4 h-4"> Branch</label>
+                            </div>
                         </div>
                         <button onclick="saveAdminSettings()" class="w-full bg-orange-600 text-white py-2 mt-2 rounded font-bold shadow hover:bg-orange-700 text-sm transition">Save Layout Settings</button>
                     </div>
@@ -173,22 +182,26 @@
         const ADMIN_EMAILS = ["shivesh211204@gmail.com", "iskcon.sunday.feast@gmail.com"];
 
         let app, db, auth, userId = null, isRegistrationOpen = true;
-        let appConfig = { askAddress: false, askBranch: false }; // Store dynamic layout config
+        
+        // Extended App Config state
+        let appConfig = { askName: true, askContact: true, askDevotee: true, askAddress: false, askBranch: false }; 
 
         const views = { loading: document.getElementById('loading-state'), closed: document.getElementById('closed-section'), family: document.getElementById('family-section'), form: document.getElementById('form-section'), card: document.getElementById('card-section'), admin: document.getElementById('admin-dashboard-section'), login: document.getElementById('admin-login-section') };
         const errorMsg = document.getElementById('loading-error');
 
-        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v9') || '[]'); } catch { return []; } }
+        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v10') || '[]'); } catch { return []; } }
         
         function saveProfileToMemory(userData) {
             let profiles = getFamilyProfiles();
-            profiles = profiles.filter(p => p.name.toLowerCase() !== userData.name.toLowerCase());
+            // Fallback for name filtering if name field is disabled
+            const matchName = userData.name || userData.contact || Date.now().toString(); 
+            profiles = profiles.filter(p => (p.name || p.contact) !== matchName);
             profiles.unshift(userData);
             if(profiles.length > 8) profiles.pop();
-            localStorage.setItem('iskcon_family_list_v9', JSON.stringify(profiles));
+            localStorage.setItem('iskcon_family_list_v10', JSON.stringify(profiles));
         }
 
-        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v9'); renderFamilyScreen(); } };
+        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v10'); renderFamilyScreen(); } };
         function hideAll() { Object.values(views).forEach(el => el.classList.add('hidden')); }
 
         window.renderFamilyScreen = function() {
@@ -199,8 +212,8 @@
                     <div onclick="quickGenerate('${index}')" class="bg-white p-4 rounded-xl border-2 border-orange-50 flex justify-between items-center cursor-pointer hover:border-orange-300 transition shadow-sm group relative overflow-hidden">
                         <div class="absolute right-0 top-0 h-full w-1 bg-orange-200 group-hover:bg-orange-500 transition-all"></div>
                         <div class="overflow-hidden pl-2">
-                            <p class="font-bold text-gray-800 text-lg group-hover:text-orange-800 font-serif">${p.name}</p>
-                            <p class="text-xs text-gray-500 font-medium">Linked: <span class="text-orange-700">${p.devotee}</span></p>
+                            <p class="font-bold text-gray-800 text-lg group-hover:text-orange-800 font-serif">${p.name || 'Guest User'}</p>
+                            ${p.devotee ? `<p class="text-xs text-gray-500 font-medium">Linked: <span class="text-orange-700">${p.devotee}</span></p>` : ''}
                         </div>
                         <div class="bg-orange-100 text-orange-600 rounded-full p-2 shadow-inner group-hover:bg-orange-600 group-hover:text-white transition mr-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -232,20 +245,23 @@
 
         window.quickGenerate = async function(index) {
             const p = getFamilyProfiles()[index]; 
-            if(p) await processTicketGeneration(p.name, p.contact, p.devotee, p.address || "", p.branch || "");
+            if(p) await processTicketGeneration(p.name || "", p.contact || "", p.devotee || "", p.address || "", p.branch || "");
         };
 
-        // NEW: Handles saving Admin settings from Dashboard
+        // Save Admin Settings including dynamic field toggles
         window.saveAdminSettings = async () => {
             try {
-                const heading = document.getElementById('admin-heading-input').value || "इस्कॉन उज्जैन";
-                const subheading = document.getElementById('admin-subheading-input').value || "Krishna Balram Hall Pass";
-                const askAddress = document.getElementById('admin-ask-address').checked;
-                const askBranch = document.getElementById('admin-ask-branch').checked;
+                const configToSave = {
+                    heading: document.getElementById('admin-heading-input').value || "इस्कॉन उज्जैन",
+                    subheading: document.getElementById('admin-subheading-input').value || "Krishna Balram Hall Pass",
+                    askName: document.getElementById('admin-ask-name').checked,
+                    askContact: document.getElementById('admin-ask-contact').checked,
+                    askDevotee: document.getElementById('admin-ask-devotee').checked,
+                    askAddress: document.getElementById('admin-ask-address').checked,
+                    askBranch: document.getElementById('admin-ask-branch').checked
+                };
                 
-                await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), {
-                    heading, subheading, askAddress, askBranch
-                }, {merge:true});
+                await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), configToSave, {merge:true});
                 alert("Settings Saved & Live Successfully!");
             } catch(e) {
                 alert("Error saving settings: " + e.message);
@@ -261,7 +277,7 @@
             address = (address || "").trim();
             branch = (branch || "").trim();
 
-            if(!/^\d{10}$/.test(contact)) { alert("Invalid Mobile Number"); return; }
+            if(appConfig.askContact && !/^\d{10}$/.test(contact)) { alert("Invalid Mobile Number"); return; }
             
             const btn = document.querySelector('button:not(.hidden)');
             const originalText = btn ? btn.innerText : "";
@@ -272,17 +288,19 @@
                 let isDuplicate = false;
                 let existingTimestamp = new Date().toISOString();
 
-                const q = query(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), where("contact", "==", contact));
-                const snapshot = await getDocs(q);
-                
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    const dbDate = new Date(d.timestamp).toISOString().split('T')[0];
-                    if (d.name.toLowerCase().trim() === name.toLowerCase() && dbDate === todayStr) {
-                        isDuplicate = true;
-                        existingTimestamp = d.timestamp;
-                    }
-                });
+                // Only check duplicates if contact is being collected, otherwise we can't accurately verify uniqueness easily
+                if (appConfig.askContact && contact) {
+                    const q = query(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), where("contact", "==", contact));
+                    const snapshot = await getDocs(q);
+                    snapshot.forEach(doc => {
+                        const d = doc.data();
+                        const dbDate = new Date(d.timestamp).toISOString().split('T')[0];
+                        if (d.name.toLowerCase().trim() === name.toLowerCase() && dbDate === todayStr) {
+                            isDuplicate = true;
+                            existingTimestamp = d.timestamp;
+                        }
+                    });
+                }
 
                 const dataObj = { name, contact, devotee, address, branch, timestamp: existingTimestamp, userId };
 
@@ -296,19 +314,23 @@
 
                 saveProfileToMemory(dataObj);
                 
-                // Update Card
-                document.getElementById('card-name').textContent = name;
-                document.getElementById('card-contact').textContent = contact;
-                document.getElementById('card-devotee').textContent = devotee;
+                // Update Card Visibility based on config
+                document.getElementById('card-name-block').classList.toggle('hidden', !appConfig.askName);
+                if(appConfig.askName) document.getElementById('card-name').textContent = name || "Guest";
                 
-                // Update Dynamic Card Fields
+                document.getElementById('card-contact-block').classList.toggle('hidden', !appConfig.askContact);
+                if(appConfig.askContact) document.getElementById('card-contact').textContent = contact;
+                
+                document.getElementById('card-devotee-block').classList.toggle('hidden', !appConfig.askDevotee);
+                if(appConfig.askDevotee) document.getElementById('card-devotee').textContent = devotee;
+
                 const extrasContainer = document.getElementById('card-extras-container');
                 const addrBlock = document.getElementById('card-address-block');
                 const branchBlock = document.getElementById('card-branch-block');
                 
                 let showExtras = false;
-                if(address) { addrBlock.classList.remove('hidden'); document.getElementById('card-address').textContent = address; showExtras = true; } else { addrBlock.classList.add('hidden'); }
-                if(branch) { branchBlock.classList.remove('hidden'); document.getElementById('card-branch').textContent = branch; showExtras = true; } else { branchBlock.classList.add('hidden'); }
+                if(appConfig.askAddress && address) { addrBlock.classList.remove('hidden'); document.getElementById('card-address').textContent = address; showExtras = true; } else { addrBlock.classList.add('hidden'); }
+                if(appConfig.askBranch && branch) { branchBlock.classList.remove('hidden'); document.getElementById('card-branch').textContent = branch; showExtras = true; } else { branchBlock.classList.add('hidden'); }
                 extrasContainer.classList.toggle('hidden', !showExtras);
 
                 document.getElementById('card-timestamp').textContent = new Date(dataObj.timestamp).toLocaleString('en-IN', {
@@ -332,39 +354,55 @@
             );
         });
 
+        // Helper to handle required attributes
+        function applyFieldSettings(id, isEnabled) {
+            const container = document.getElementById(`field-${id}`);
+            const input = document.getElementById(id);
+            if(container) container.classList.toggle('hidden', !isEnabled);
+            if(input) {
+                if(isEnabled) input.setAttribute('required', 'true');
+                else input.removeAttribute('required');
+            }
+        }
+
         async function init() {
             app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app);
             
-            // Listen to settings for dynamic updates
             onSnapshot(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), (snap) => {
                 const data = snap.exists() ? snap.data() : {};
                 
-                // 1. Core Config
+                // Core Config - Default true for critical fields if undefined
                 isRegistrationOpen = data.isRegistrationOpen !== false;
+                appConfig.askName = data.askName !== false; 
+                appConfig.askContact = data.askContact !== false;
+                appConfig.askDevotee = data.askDevotee !== false;
                 appConfig.askAddress = !!data.askAddress;
                 appConfig.askBranch = !!data.askBranch;
                 const customHeading = data.heading || "इस्कॉन उज्जैन";
                 const customSubheading = data.subheading || "Krishna Balram Hall Pass";
 
-                // 2. Update UI Toggles & Fields
+                // Form Field Logic
+                applyFieldSettings('name', appConfig.askName);
+                applyFieldSettings('contact', appConfig.askContact);
+                applyFieldSettings('devotee', appConfig.askDevotee);
+                applyFieldSettings('address', appConfig.askAddress);
+                applyFieldSettings('branch', appConfig.askBranch);
+
+                // Update UI Toggles & Headings
                 const btn = document.getElementById('reg-toggle-btn');
                 if(btn) { btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED"; btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-green-600 text-white" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-600 text-white"; }
                 
-                document.getElementById('field-address').classList.toggle('hidden', !appConfig.askAddress);
-                if(appConfig.askAddress) document.getElementById('address').setAttribute('required', 'true'); else document.getElementById('address').removeAttribute('required');
-
-                document.getElementById('field-branch').classList.toggle('hidden', !appConfig.askBranch);
-                if(appConfig.askBranch) document.getElementById('branch').setAttribute('required', 'true'); else document.getElementById('branch').removeAttribute('required');
-
-                // 3. Update Headings Everywhere
                 document.getElementById('main-heading').innerText = customHeading;
                 document.getElementById('sub-heading').innerText = customSubheading;
                 document.getElementById('ticket-main-heading').innerText = customHeading;
                 document.getElementById('ticket-sub-heading').innerText = customSubheading;
 
-                // 4. Update Admin Form Inputs automatically
+                // Sync Admin Form Inputs
                 document.getElementById('admin-heading-input').value = customHeading;
                 document.getElementById('admin-subheading-input').value = customSubheading;
+                document.getElementById('admin-ask-name').checked = appConfig.askName;
+                document.getElementById('admin-ask-contact').checked = appConfig.askContact;
+                document.getElementById('admin-ask-devotee').checked = appConfig.askDevotee;
                 document.getElementById('admin-ask-address').checked = appConfig.askAddress;
                 document.getElementById('admin-ask-branch').checked = appConfig.askBranch;
 
@@ -398,10 +436,10 @@
                 
                 t.innerHTML = d.map(r => `
                     <tr class="hover:bg-orange-50 border-b border-orange-100">
-                        <td class="p-3 font-bold">${r.name}</td>
-                        <td class="p-3 text-xs">${r.contact}</td>
+                        <td class="p-3 font-bold">${r.name || '-'}</td>
+                        <td class="p-3 text-xs">${r.contact || '-'}</td>
                         <td class="p-3 font-medium text-orange-800 text-xs">
-                            <div class="truncate max-w-[120px]">D: ${r.devotee || '-'}</div>
+                            ${r.devotee ? `<div class="truncate max-w-[120px]">D: ${r.devotee}</div>` : ''}
                             ${r.branch ? `<div class="truncate max-w-[120px] text-gray-500">B: ${r.branch}</div>` : ''}
                         </td>
                     </tr>`).join('');
@@ -413,7 +451,7 @@
             let csv = "\uFEFFName,Contact,Devotee,Address,Branch,Time\n";
             s.forEach(d => { 
                 const r = d.data(); 
-                csv += `"${r.name}","${r.contact}","${r.devotee || ''}","${r.address || ''}","${r.branch || ''}","${r.timestamp}"\n`; 
+                csv += `"${r.name || ''}","${r.contact || ''}","${r.devotee || ''}","${r.address || ''}","${r.branch || ''}","${r.timestamp}"\n`; 
             });
             const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='Data.csv'; a.click();
         }
