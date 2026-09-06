@@ -36,7 +36,6 @@
 
         <div class="pt-10 pb-8 text-center bg-orange-50/80 border-b border-orange-100">
             <div class="flex flex-col items-center justify-center">
-                <!-- Dynamic Headings -->
                 <h1 id="main-heading" class="text-4xl font-extrabold text-orange-900 tracking-wide leading-tight mb-1">इस्कॉन उज्जैन</h1>
                 <h2 id="sub-heading" class="text-xl font-bold text-orange-700 uppercase tracking-wider mt-1 mb-2 border-b-2 border-orange-200 inline-block pb-1">Krishna Balram Hall Pass</h2>
             </div>
@@ -61,7 +60,7 @@
                     <button onclick="clearFamilyData()" class="text-xs text-red-400 hover:text-red-600">Clear</button>
                 </div>
                 <div id="family-list" class="space-y-3 mb-6 max-h-[40vh] overflow-y-auto pr-1"></div>
-                <button onclick="showNewForm()" class="w-full py-3 bg-orange-50 border border-orange-200 text-orange-800 rounded-lg text-sm font-bold hover:bg-orange-100 transition flex items-center justify-center gap-2">
+                <button onclick="showNewForm()" id="lbl-new-entry" class="w-full py-3 bg-orange-50 border border-orange-200 text-orange-800 rounded-lg text-sm font-bold hover:bg-orange-100 transition flex items-center justify-center gap-2">
                     <span>+</span> नया पास बनाएँ (New Entry)
                 </button>
             </div>
@@ -71,24 +70,23 @@
                     <button onclick="renderFamilyScreen()" id="back-to-family-btn" class="mr-3 text-orange-500 hover:text-orange-700 hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </button>
-                    <h2 class="text-xl font-bold text-gray-800">अतिथि पंजीकरण</h2>
+                    <h2 id="lbl-reg-title" class="text-xl font-bold text-gray-800">अतिथि पंजीकरण</h2>
                 </div>
                 <form id="registration-form" class="space-y-5" autocomplete="off">
-                    <!-- Fully Dynamic Fields -->
-                    <div id="field-name" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div id="field-contact" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div id="field-devotee" class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div id="field-address" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पता (Address)</label><input type="text" id="address" placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    <div id="field-branch" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">शाखा (Branch)</label><input type="text" id="branch" placeholder="Branch Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-name" class="group"><label id="lbl-name" class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-contact" class="group"><label id="lbl-contact" class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 Digits" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-devotee" class="group"><label id="lbl-devotee" class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-address" class="group hidden"><label id="lbl-address" class="block text-xs font-bold text-orange-800 uppercase mb-1">पता (Address)</label><input type="text" id="address" placeholder="Address" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-branch" class="group hidden"><label id="lbl-branch" class="block text-xs font-bold text-orange-800 uppercase mb-1">शाखा (Branch)</label><input type="text" id="branch" placeholder="Branch Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
 
-                    <button type="submit" id="submit-button" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">हरे कृष्णा (Get Pass)</button>
+                    <button type="submit" id="lbl-submit" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">हरे कृष्णा (Get Pass)</button>
                 </form>
             </div>
 
             <div id="card-section" class="hidden">
                 <div class="text-center mb-4">
                     <div class="bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-bold inline-flex items-center mb-2">✓ Pass Generated!</div>
-                    <h2 class="text-lg font-bold text-gray-800">कृपया गेट पर दिखाएं</h2>
+                    <h2 id="lbl-show-gate" class="text-lg font-bold text-gray-800">कृपया गेट पर दिखाएं</h2>
                 </div>
                 <div id="entry-card" class="w-full bg-white border-2 border-orange-500 rounded-xl overflow-hidden shadow-xl relative mb-6">
                     <div class="ticket-edge-top absolute top-0 left-0 w-full z-10"></div>
@@ -101,21 +99,20 @@
                     </div>
                     
                     <div class="p-6 space-y-4 relative">
-                        <!-- Dynamic Ticket Fields -->
                         <div id="card-name-block">
-                            <p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p>
+                            <p id="lbl-card-vis" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Visitor Name</p>
                             <p id="card-name" class="text-3xl font-bold text-gray-900 leading-tight font-serif"></p>
                         </div>
                         <div id="card-divider" class="border-t border-dashed border-orange-200"></div>
                         
                         <div class="grid grid-cols-2 gap-4">
-                            <div id="card-contact-block"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
-                            <div id="card-devotee-block"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
+                            <div id="card-contact-block"><p id="lbl-card-mob" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
+                            <div id="card-devotee-block"><p id="lbl-card-dev" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
                         </div>
                         
                         <div id="card-extras-container" class="grid grid-cols-2 gap-4 hidden mt-2 pt-2 border-t border-dashed border-orange-200">
-                            <div id="card-address-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-address" class="text-sm font-semibold text-gray-800"></p></div>
-                            <div id="card-branch-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Branch</p><p id="card-branch" class="text-sm font-semibold text-gray-800"></p></div>
+                            <div id="card-address-block" class="hidden"><p id="lbl-card-add" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-address" class="text-sm font-semibold text-gray-800"></p></div>
+                            <div id="card-branch-block" class="hidden"><p id="lbl-card-bra" class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Branch</p><p id="card-branch" class="text-sm font-semibold text-gray-800"></p></div>
                         </div>
                     </div>
                     
@@ -127,13 +124,23 @@
             <div id="admin-dashboard-section" class="hidden">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100"><h2 class="text-lg font-bold text-gray-800">Admin Seva Panel</h2><button onclick="handleSignOut()" class="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">LOGOUT</button></div>
                 
-                <!-- NEW: Admin App Settings Configurator (Expanded) -->
+                <!-- Admin App Settings Configurator -->
                 <div class="bg-white p-4 rounded-xl border border-orange-200 shadow-sm mb-4">
                     <h3 class="text-sm font-bold text-orange-900 mb-3 border-b border-orange-100 pb-1">⚙️ App Settings</h3>
                     <div class="space-y-3">
                         <div><label class="text-[10px] uppercase text-orange-600 font-bold">Main Heading</label><input type="text" id="admin-heading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
                         <div><label class="text-[10px] uppercase text-orange-600 font-bold">Sub Heading</label><input type="text" id="admin-subheading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
                         
+                        <!-- NEW: Language Toggle -->
+                        <div class="pt-1 border-t border-orange-100 mt-2">
+                            <p class="text-[10px] uppercase text-orange-600 font-bold mb-2">Display Language</p>
+                            <select id="admin-language" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400 font-bold text-gray-700">
+                                <option value="both">Hindi + English (Default)</option>
+                                <option value="hi">Hindi Only (हिंदी)</option>
+                                <option value="en">English Only</option>
+                            </select>
+                        </div>
+
                         <div class="pt-2">
                             <p class="text-[10px] uppercase text-orange-600 font-bold mb-2">Enable/Disable Fields</p>
                             <div class="grid grid-cols-2 gap-3 bg-orange-50 p-3 rounded border border-orange-100">
@@ -183,17 +190,58 @@
 
         let app, db, auth, userId = null, isRegistrationOpen = true;
         
-        // Extended App Config state
-        let appConfig = { askName: true, askContact: true, askDevotee: true, askAddress: false, askBranch: false }; 
+        // Extended App Config state including Language
+        let appConfig = { askName: true, askContact: true, askDevotee: true, askAddress: false, askBranch: false, appLang: 'both' }; 
 
         const views = { loading: document.getElementById('loading-state'), closed: document.getElementById('closed-section'), family: document.getElementById('family-section'), form: document.getElementById('form-section'), card: document.getElementById('card-section'), admin: document.getElementById('admin-dashboard-section'), login: document.getElementById('admin-login-section') };
         const errorMsg = document.getElementById('loading-error');
+
+        // Dynamic Translation System
+        const translations = {
+            regTitle: { hi: "अतिथि पंजीकरण", en: "Guest Registration", both: "अतिथि पंजीकरण" },
+            nameL: { hi: "पूरा नाम", en: "Full Name", both: "पूरा नाम (Full Name)" },
+            contactL: { hi: "मोबाइल नंबर", en: "Mobile No.", both: "मोबाइल नंबर (Mobile)" },
+            devoteeL: { hi: "किससे जुड़े हैं?", en: "Connected Devotee?", both: "मंदिर में किससे जुड़े हैं?" },
+            addressL: { hi: "पता", en: "Address", both: "पता (Address)" },
+            branchL: { hi: "शाखा", en: "Branch", both: "शाखा (Branch)" },
+            btnLabel: { hi: "हरे कृष्णा (पास प्राप्त करें)", en: "Hare Krishna (Get Pass)", both: "हरे कृष्णा (Get Pass)" },
+            cardVis: { hi: "अतिथि का नाम", en: "Visitor Name", both: "Visitor Name" },
+            cardMob: { hi: "मोबाइल", en: "Mobile", both: "Mobile" },
+            cardDev: { hi: "किससे जुड़े हैं", en: "Connected With", both: "Connected With" },
+            cardAdd: { hi: "पता", en: "Address", both: "Address" },
+            cardBra: { hi: "शाखा", en: "Branch", both: "Branch" },
+            showGate: { hi: "कृपया गेट पर दिखाएं", en: "Please show at gate", both: "कृपया गेट पर दिखाएं" },
+            newEntryBtn: { hi: "<span>+</span> नया पास बनाएँ", en: "<span>+</span> New Entry", both: "<span>+</span> नया पास बनाएँ (New Entry)" }
+        };
+
+        function applyLanguage(mode) {
+            const setTxt = (id, key) => { 
+                const el = document.getElementById(id); 
+                if(el && translations[key]) el.innerHTML = translations[key][mode] || translations[key]['both']; 
+            };
+            
+            setTxt('lbl-reg-title', 'regTitle');
+            setTxt('lbl-name', 'nameL');
+            setTxt('lbl-contact', 'contactL');
+            setTxt('lbl-devotee', 'devoteeL');
+            setTxt('lbl-address', 'addressL');
+            setTxt('lbl-branch', 'branchL');
+            setTxt('lbl-submit', 'btnLabel');
+            
+            setTxt('lbl-card-vis', 'cardVis');
+            setTxt('lbl-card-mob', 'cardMob');
+            setTxt('lbl-card-dev', 'cardDev');
+            setTxt('lbl-card-add', 'cardAdd');
+            setTxt('lbl-card-bra', 'cardBra');
+            
+            setTxt('lbl-show-gate', 'showGate');
+            setTxt('lbl-new-entry', 'newEntryBtn');
+        }
 
         function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v10') || '[]'); } catch { return []; } }
         
         function saveProfileToMemory(userData) {
             let profiles = getFamilyProfiles();
-            // Fallback for name filtering if name field is disabled
             const matchName = userData.name || userData.contact || Date.now().toString(); 
             profiles = profiles.filter(p => (p.name || p.contact) !== matchName);
             profiles.unshift(userData);
@@ -248,7 +296,6 @@
             if(p) await processTicketGeneration(p.name || "", p.contact || "", p.devotee || "", p.address || "", p.branch || "");
         };
 
-        // Save Admin Settings including dynamic field toggles
         window.saveAdminSettings = async () => {
             try {
                 const configToSave = {
@@ -258,7 +305,8 @@
                     askContact: document.getElementById('admin-ask-contact').checked,
                     askDevotee: document.getElementById('admin-ask-devotee').checked,
                     askAddress: document.getElementById('admin-ask-address').checked,
-                    askBranch: document.getElementById('admin-ask-branch').checked
+                    askBranch: document.getElementById('admin-ask-branch').checked,
+                    appLang: document.getElementById('admin-language').value || 'both'
                 };
                 
                 await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), configToSave, {merge:true});
@@ -288,7 +336,6 @@
                 let isDuplicate = false;
                 let existingTimestamp = new Date().toISOString();
 
-                // Only check duplicates if contact is being collected, otherwise we can't accurately verify uniqueness easily
                 if (appConfig.askContact && contact) {
                     const q = query(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), where("contact", "==", contact));
                     const snapshot = await getDocs(q);
@@ -314,7 +361,6 @@
 
                 saveProfileToMemory(dataObj);
                 
-                // Update Card Visibility based on config
                 document.getElementById('card-name-block').classList.toggle('hidden', !appConfig.askName);
                 if(appConfig.askName) document.getElementById('card-name').textContent = name || "Guest";
                 
@@ -354,7 +400,6 @@
             );
         });
 
-        // Helper to handle required attributes
         function applyFieldSettings(id, isEnabled) {
             const container = document.getElementById(`field-${id}`);
             const input = document.getElementById(id);
@@ -371,24 +416,25 @@
             onSnapshot(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), (snap) => {
                 const data = snap.exists() ? snap.data() : {};
                 
-                // Core Config - Default true for critical fields if undefined
                 isRegistrationOpen = data.isRegistrationOpen !== false;
                 appConfig.askName = data.askName !== false; 
                 appConfig.askContact = data.askContact !== false;
                 appConfig.askDevotee = data.askDevotee !== false;
                 appConfig.askAddress = !!data.askAddress;
                 appConfig.askBranch = !!data.askBranch;
+                appConfig.appLang = data.appLang || 'both';
                 const customHeading = data.heading || "इस्कॉन उज्जैन";
                 const customSubheading = data.subheading || "Krishna Balram Hall Pass";
 
-                // Form Field Logic
                 applyFieldSettings('name', appConfig.askName);
                 applyFieldSettings('contact', appConfig.askContact);
                 applyFieldSettings('devotee', appConfig.askDevotee);
                 applyFieldSettings('address', appConfig.askAddress);
                 applyFieldSettings('branch', appConfig.askBranch);
+                
+                // Apply language UI translations
+                applyLanguage(appConfig.appLang);
 
-                // Update UI Toggles & Headings
                 const btn = document.getElementById('reg-toggle-btn');
                 if(btn) { btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED"; btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-green-600 text-white" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-600 text-white"; }
                 
@@ -397,7 +443,6 @@
                 document.getElementById('ticket-main-heading').innerText = customHeading;
                 document.getElementById('ticket-sub-heading').innerText = customSubheading;
 
-                // Sync Admin Form Inputs
                 document.getElementById('admin-heading-input').value = customHeading;
                 document.getElementById('admin-subheading-input').value = customSubheading;
                 document.getElementById('admin-ask-name').checked = appConfig.askName;
@@ -405,6 +450,7 @@
                 document.getElementById('admin-ask-devotee').checked = appConfig.askDevotee;
                 document.getElementById('admin-ask-address').checked = appConfig.askAddress;
                 document.getElementById('admin-ask-branch').checked = appConfig.askBranch;
+                document.getElementById('admin-language').value = appConfig.appLang;
 
                 if(!isRegistrationOpen && views.admin.classList.contains('hidden')) renderFamilyScreen();
             }, (error) => {
