@@ -36,10 +36,9 @@
 
         <div class="pt-10 pb-8 text-center bg-orange-50/80 border-b border-orange-100">
             <div class="flex flex-col items-center justify-center">
-                <h1 class="text-4xl font-extrabold text-orange-900 tracking-wide leading-tight mb-1">इस्कॉन उज्जैन</h1>
-                
-                <h2 class="text-xl font-bold text-orange-700 uppercase tracking-wider mt-1 mb-2 border-b-2 border-orange-200 inline-block pb-1">Krishna Balram Hall Pass</h2>
-            
+                <!-- Dynamic Headings -->
+                <h1 id="main-heading" class="text-4xl font-extrabold text-orange-900 tracking-wide leading-tight mb-1">इस्कॉन उज्जैन</h1>
+                <h2 id="sub-heading" class="text-xl font-bold text-orange-700 uppercase tracking-wider mt-1 mb-2 border-b-2 border-orange-200 inline-block pb-1">Krishna Balram Hall Pass</h2>
             </div>
             <p class="text-[10px] font-medium text-orange-600 uppercase tracking-widest opacity-80 leading-relaxed mt-3">Founder Acharya: His Divine Grace<br>A.C. Bhaktivedanta Swami Prabhupada</p>
         </div>
@@ -77,9 +76,12 @@
                 <form id="registration-form" class="space-y-5" autocomplete="off">
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पूरा नाम (Full Name)</label><input type="text" id="name" required placeholder="अपना नाम लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मोबाइल नंबर (Mobile)</label><input type="tel" id="contact" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
-                    
                     <div class="group"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">मंदिर में किससे जुड़े हैं?</label><input type="text" id="devotee" required placeholder="Eg. HG Prabhu Ji Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
                     
+                    <!-- Dynamic Fields (Hidden by default) -->
+                    <div id="field-address" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">पता (Address)</label><input type="text" id="address" placeholder="अपना पता लिखें" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+                    <div id="field-branch" class="group hidden"><label class="block text-xs font-bold text-orange-800 uppercase mb-1">शाखा (Branch)</label><input type="text" id="branch" placeholder="Branch Name" class="w-full p-3 bg-orange-50/50 border-b-2 border-orange-200 focus:border-orange-600 outline-none transition rounded-t-md placeholder-gray-400 text-gray-800"></div>
+
                     <button type="submit" id="submit-button" class="w-full mt-4 bg-orange-700 text-white py-3.5 rounded-lg font-bold shadow-md hover:bg-orange-800 transition-transform active:scale-95 flex items-center justify-center">हरे कृष्णा (Get Pass)</button>
                 </form>
             </div>
@@ -92,9 +94,9 @@
                 <div id="entry-card" class="w-full bg-white border-2 border-orange-500 rounded-xl overflow-hidden shadow-xl relative mb-6">
                     <div class="ticket-edge-top absolute top-0 left-0 w-full z-10"></div>
                     <div class="bg-white pt-6 pb-2 text-center border-b border-orange-100 relative z-0 mt-2">
-                        <h3 class="text-2xl font-extrabold text-orange-800 tracking-wide mt-2" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
-                        
-                        <p class="text-xs font-bold text-orange-600 uppercase tracking-widest">Krishna Balram Hall Pass</p>
+                        <!-- Dynamic Ticket Headings -->
+                        <h3 id="ticket-main-heading" class="text-2xl font-extrabold text-orange-800 tracking-wide mt-2" style="font-family: 'Playfair Display', serif;">ISKCON UJJAIN</h3>
+                        <p id="ticket-sub-heading" class="text-xs font-bold text-orange-600 uppercase tracking-widest">Krishna Balram Hall Pass</p>
                         
                         <div class="mt-3 bg-orange-50 py-2 border-y border-orange-100">
                             <p id="card-timestamp" class="text-xl font-bold text-orange-800 font-mono"></p>
@@ -107,6 +109,12 @@
                             <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Mobile</p><p id="card-contact" class="text-sm font-semibold text-gray-800 font-mono"></p></div>
                             <div><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Connected With</p><p id="card-devotee" class="text-sm font-bold text-orange-700"></p></div>
                         </div>
+                        
+                        <!-- Dynamic Ticket Fields -->
+                        <div id="card-extras-container" class="grid grid-cols-2 gap-4 hidden mt-2 pt-2 border-t border-dashed border-orange-200">
+                            <div id="card-address-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Address</p><p id="card-address" class="text-sm font-semibold text-gray-800"></p></div>
+                            <div id="card-branch-block" class="hidden"><p class="text-[10px] uppercase text-orange-400 font-bold tracking-wider">Branch</p><p id="card-branch" class="text-sm font-semibold text-gray-800"></p></div>
+                        </div>
                     </div>
                     <div class="bg-orange-50 p-2 text-center border-t border-orange-100"><p class="text-[10px] uppercase text-orange-400 font-bold">Pass ID</p><p id="card-user-id" class="text-sm font-mono text-orange-800 font-bold uppercase tracking-wider"></p></div>
                 </div>
@@ -115,11 +123,28 @@
 
             <div id="admin-dashboard-section" class="hidden">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100"><h2 class="text-lg font-bold text-gray-800">Admin Seva Panel</h2><button onclick="handleSignOut()" class="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">LOGOUT</button></div>
+                
+                <!-- NEW: Admin App Settings Configurator -->
+                <div class="bg-white p-4 rounded-xl border border-orange-200 shadow-sm mb-4">
+                    <h3 class="text-sm font-bold text-orange-900 mb-3 border-b border-orange-100 pb-1">⚙️ App Settings</h3>
+                    <div class="space-y-3">
+                        <div><label class="text-[10px] uppercase text-orange-600 font-bold">Main Heading</label><input type="text" id="admin-heading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
+                        <div><label class="text-[10px] uppercase text-orange-600 font-bold">Sub Heading</label><input type="text" id="admin-subheading-input" class="w-full p-2 text-sm bg-orange-50 border border-orange-100 rounded outline-none focus:border-orange-400"></div>
+                        
+                        <div class="flex items-center gap-6 pt-2">
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-address" class="accent-orange-600 w-4 h-4"> Enable Address Field</label>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700"><input type="checkbox" id="admin-ask-branch" class="accent-orange-600 w-4 h-4"> Enable Branch Field</label>
+                        </div>
+                        <button onclick="saveAdminSettings()" class="w-full bg-orange-600 text-white py-2 mt-2 rounded font-bold shadow hover:bg-orange-700 text-sm transition">Save Layout Settings</button>
+                    </div>
+                </div>
+
                 <div class="bg-orange-50 rounded-xl p-4 mb-4 border border-orange-200 shadow-sm">
                     <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-lg border border-orange-100"><span class="text-sm font-bold text-orange-900">Registration Status</span><button id="reg-toggle-btn" onclick="toggleRegistrationStatus()" class="px-4 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm"></button></div>
                     <div class="flex gap-3"><button onclick="exportToCSV()" class="flex-1 bg-white text-orange-800 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-orange-200 hover:bg-orange-100">Excel Export</button><button onclick="clearAllData()" class="flex-1 bg-white text-red-600 py-2.5 rounded-lg text-xs font-bold shadow-sm border border-red-200 hover:bg-red-50">Clear Data</button></div>
                 </div>
-                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm"><div class="max-h-80 overflow-y-auto"><table class="w-full text-left text-sm"><thead class="bg-orange-50/80 sticky top-0 text-orange-800 text-xs uppercase font-bold"><tr><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Devotee</th></tr></thead><tbody id="attendee-list" class="divide-y divide-orange-50"></tbody></table></div></div>
+                
+                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm"><div class="max-h-80 overflow-y-auto"><table class="w-full text-left text-sm"><thead class="bg-orange-50/80 sticky top-0 text-orange-800 text-xs uppercase font-bold"><tr><th class="p-3">Name</th><th class="p-3">Phone</th><th class="p-3">Info</th></tr></thead><tbody id="attendee-list" class="divide-y divide-orange-50"></tbody></table></div></div>
             </div>
             
             <div id="admin-login-section" class="hidden text-center">
@@ -148,27 +173,22 @@
         const ADMIN_EMAILS = ["shivesh211204@gmail.com", "iskcon.sunday.feast@gmail.com"];
 
         let app, db, auth, userId = null, isRegistrationOpen = true;
+        let appConfig = { askAddress: false, askBranch: false }; // Store dynamic layout config
+
         const views = { loading: document.getElementById('loading-state'), closed: document.getElementById('closed-section'), family: document.getElementById('family-section'), form: document.getElementById('form-section'), card: document.getElementById('card-section'), admin: document.getElementById('admin-dashboard-section'), login: document.getElementById('admin-login-section') };
         const errorMsg = document.getElementById('loading-error');
 
-        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v8') || '[]'); } catch { return []; } }
+        function getFamilyProfiles() { try { return JSON.parse(localStorage.getItem('iskcon_family_list_v9') || '[]'); } catch { return []; } }
         
-        // FIXED: Removed homeAddress parameter
-        function saveProfileToMemory(name, contact, devotee) {
+        function saveProfileToMemory(userData) {
             let profiles = getFamilyProfiles();
-            // Safety check for undefined values
-            name = (name || "").trim();
-            contact = (contact || "").trim();
-            devotee = (devotee || "").trim();
-            
-            profiles = profiles.filter(p => p.name.toLowerCase() !== name.toLowerCase());
-            // We save homeAddress as empty string to maintain compatibility if needed, or just omit it
-            profiles.unshift({ name, contact, homeAddress: "", devotee });
+            profiles = profiles.filter(p => p.name.toLowerCase() !== userData.name.toLowerCase());
+            profiles.unshift(userData);
             if(profiles.length > 8) profiles.pop();
-            localStorage.setItem('iskcon_family_list_v8', JSON.stringify(profiles));
+            localStorage.setItem('iskcon_family_list_v9', JSON.stringify(profiles));
         }
 
-        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v8'); renderFamilyScreen(); } };
+        window.clearFamilyData = function() { if(confirm("Clear saved list?")) { localStorage.removeItem('iskcon_family_list_v9'); renderFamilyScreen(); } };
         function hideAll() { Object.values(views).forEach(el => el.classList.add('hidden')); }
 
         window.renderFamilyScreen = function() {
@@ -197,6 +217,8 @@
             
             if(profiles.length > 0) {
                 document.getElementById('devotee').value = profiles[0].devotee || "";
+                document.getElementById('address').value = profiles[0].address || "";
+                document.getElementById('branch').value = profiles[0].branch || "";
                 document.getElementById('name').value = "";
                 document.getElementById('contact').value = ""; 
             } else { 
@@ -210,18 +232,34 @@
 
         window.quickGenerate = async function(index) {
             const p = getFamilyProfiles()[index]; 
-            // FIXED: Passing correct 3 arguments
-            if(p) await generateTicket(p.name, p.contact, p.devotee);
+            if(p) await processTicketGeneration(p.name, p.contact, p.devotee, p.address || "", p.branch || "");
         };
 
-        // FIXED: Removed homeAddress parameter and added safe trims
-        async function generateTicket(name, contact, devotee) {
+        // NEW: Handles saving Admin settings from Dashboard
+        window.saveAdminSettings = async () => {
+            try {
+                const heading = document.getElementById('admin-heading-input').value || "इस्कॉन उज्जैन";
+                const subheading = document.getElementById('admin-subheading-input').value || "Krishna Balram Hall Pass";
+                const askAddress = document.getElementById('admin-ask-address').checked;
+                const askBranch = document.getElementById('admin-ask-branch').checked;
+                
+                await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), {
+                    heading, subheading, askAddress, askBranch
+                }, {merge:true});
+                alert("Settings Saved & Live Successfully!");
+            } catch(e) {
+                alert("Error saving settings: " + e.message);
+            }
+        };
+
+        async function processTicketGeneration(name, contact, devotee, address, branch) {
             if(!userId) { alert("Reloading..."); window.location.reload(); return; }
             
-            // Safe trims to prevent crash
             name = (name || "").trim();
             contact = (contact || "").trim();
             devotee = (devotee || "").trim();
+            address = (address || "").trim();
+            branch = (branch || "").trim();
 
             if(!/^\d{10}$/.test(contact)) { alert("Invalid Mobile Number"); return; }
             
@@ -246,24 +284,34 @@
                     }
                 });
 
+                const dataObj = { name, contact, devotee, address, branch, timestamp: existingTimestamp, userId };
+
                 if (!isDuplicate) {
-                    const timestamp = new Date().toISOString();
-                    // NOTE: homeAddress is sent as empty string since it was removed from form
-                    const data = { name, contact, homeAddress: "", devotee, timestamp, userId };
-                    await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/registrations/entryCard`), data);
-                    await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), data);
-                    existingTimestamp = timestamp;
+                    dataObj.timestamp = new Date().toISOString();
+                    await setDoc(doc(db, `artifacts/${firebaseConfig.projectId}/users/${userId}/registrations/entryCard`), dataObj);
+                    await addDoc(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`), dataObj);
                 } else {
                     alert("⚠️ आपकी आज की हाजिरी पहले ही लग चुकी है। (Attendance already marked!)");
                 }
 
-                // FIXED: Call with 3 args
-                saveProfileToMemory(name, contact, devotee);
+                saveProfileToMemory(dataObj);
                 
+                // Update Card
                 document.getElementById('card-name').textContent = name;
                 document.getElementById('card-contact').textContent = contact;
                 document.getElementById('card-devotee').textContent = devotee;
-                document.getElementById('card-timestamp').textContent = new Date(existingTimestamp).toLocaleString('en-IN', {
+                
+                // Update Dynamic Card Fields
+                const extrasContainer = document.getElementById('card-extras-container');
+                const addrBlock = document.getElementById('card-address-block');
+                const branchBlock = document.getElementById('card-branch-block');
+                
+                let showExtras = false;
+                if(address) { addrBlock.classList.remove('hidden'); document.getElementById('card-address').textContent = address; showExtras = true; } else { addrBlock.classList.add('hidden'); }
+                if(branch) { branchBlock.classList.remove('hidden'); document.getElementById('card-branch').textContent = branch; showExtras = true; } else { branchBlock.classList.add('hidden'); }
+                extrasContainer.classList.toggle('hidden', !showExtras);
+
+                document.getElementById('card-timestamp').textContent = new Date(dataObj.timestamp).toLocaleString('en-IN', {
                     weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
                 });
                 document.getElementById('card-user-id').textContent = 'ID:' + userId.substring(0,6).toUpperCase();
@@ -275,20 +323,51 @@
 
         document.getElementById('registration-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            // FIXED: Passing correct 3 arguments
-            await generateTicket(
+            await processTicketGeneration(
                 document.getElementById('name').value,
                 document.getElementById('contact').value,
-                document.getElementById('devotee').value
+                document.getElementById('devotee').value,
+                document.getElementById('address').value,
+                document.getElementById('branch').value
             );
         });
 
         async function init() {
             app = initializeApp(firebaseConfig); db = getFirestore(app); auth = getAuth(app);
+            
+            // Listen to settings for dynamic updates
             onSnapshot(doc(db, `artifacts/${firebaseConfig.projectId}/config/settings`), (snap) => {
-                isRegistrationOpen = snap.exists() ? snap.data().isRegistrationOpen !== false : true;
+                const data = snap.exists() ? snap.data() : {};
+                
+                // 1. Core Config
+                isRegistrationOpen = data.isRegistrationOpen !== false;
+                appConfig.askAddress = !!data.askAddress;
+                appConfig.askBranch = !!data.askBranch;
+                const customHeading = data.heading || "इस्कॉन उज्जैन";
+                const customSubheading = data.subheading || "Krishna Balram Hall Pass";
+
+                // 2. Update UI Toggles & Fields
                 const btn = document.getElementById('reg-toggle-btn');
                 if(btn) { btn.innerText = isRegistrationOpen ? "OPEN" : "CLOSED"; btn.className = isRegistrationOpen ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-green-600 text-white" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-600 text-white"; }
+                
+                document.getElementById('field-address').classList.toggle('hidden', !appConfig.askAddress);
+                if(appConfig.askAddress) document.getElementById('address').setAttribute('required', 'true'); else document.getElementById('address').removeAttribute('required');
+
+                document.getElementById('field-branch').classList.toggle('hidden', !appConfig.askBranch);
+                if(appConfig.askBranch) document.getElementById('branch').setAttribute('required', 'true'); else document.getElementById('branch').removeAttribute('required');
+
+                // 3. Update Headings Everywhere
+                document.getElementById('main-heading').innerText = customHeading;
+                document.getElementById('sub-heading').innerText = customSubheading;
+                document.getElementById('ticket-main-heading').innerText = customHeading;
+                document.getElementById('ticket-sub-heading').innerText = customSubheading;
+
+                // 4. Update Admin Form Inputs automatically
+                document.getElementById('admin-heading-input').value = customHeading;
+                document.getElementById('admin-subheading-input').value = customSubheading;
+                document.getElementById('admin-ask-address').checked = appConfig.askAddress;
+                document.getElementById('admin-ask-branch').checked = appConfig.askBranch;
+
                 if(!isRegistrationOpen && views.admin.classList.contains('hidden')) renderFamilyScreen();
             }, (error) => {
                 errorMsg.innerText = "Error: Check Firestore Rules.";
@@ -316,14 +395,26 @@
             try {
                 const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
                 const d = []; s.forEach(doc => d.push(doc.data())); d.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                t.innerHTML = d.map(r => `<tr class="hover:bg-orange-50 border-b border-orange-100"><td class="p-3 font-bold">${r.name}</td><td class="p-3 text-xs">${r.contact}</td><td class="p-3 font-medium truncate max-w-[100px] text-orange-800">${r.devotee || r.address || '-'}</td></tr>`).join('');
+                
+                t.innerHTML = d.map(r => `
+                    <tr class="hover:bg-orange-50 border-b border-orange-100">
+                        <td class="p-3 font-bold">${r.name}</td>
+                        <td class="p-3 text-xs">${r.contact}</td>
+                        <td class="p-3 font-medium text-orange-800 text-xs">
+                            <div class="truncate max-w-[120px]">D: ${r.devotee || '-'}</div>
+                            ${r.branch ? `<div class="truncate max-w-[120px] text-gray-500">B: ${r.branch}</div>` : ''}
+                        </td>
+                    </tr>`).join('');
             } catch { t.innerHTML = '<tr><td>Error</td></tr>'; }
         }
 
         window.exportToCSV = async function() {
             const s = await getDocs(collection(db, `artifacts/${firebaseConfig.projectId}/public/data/attendees`));
-            let csv = "\uFEFFName,Contact,Address,Devotee,Time\n";
-            s.forEach(d => { const r = d.data(); csv += `"${r.name}","${r.contact}","${r.homeAddress||''}","${r.devotee||r.address}","${r.timestamp}"\n`; });
+            let csv = "\uFEFFName,Contact,Devotee,Address,Branch,Time\n";
+            s.forEach(d => { 
+                const r = d.data(); 
+                csv += `"${r.name}","${r.contact}","${r.devotee || ''}","${r.address || ''}","${r.branch || ''}","${r.timestamp}"\n`; 
+            });
             const b = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='Data.csv'; a.click();
         }
 
